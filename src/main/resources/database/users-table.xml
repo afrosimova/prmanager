@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Nastia">
+        <comment>
+            Create user table
+        </comment>
+        <sql>
+            CREATE TABLE User (
+                                  UserID INT AUTO_INCREMENT PRIMARY KEY,
+                                  login VARCHAR(50) UNIQUE,
+                                  password VARCHAR(255),
+                                  isAdmin BOOLEAN
+            );
+        </sql>
+        <rollback>
+            DROP TABLE User;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

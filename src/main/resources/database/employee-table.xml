@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Nastia">
+        <comment>
+            Create user table
+        </comment>
+        <sql>
+            CREATE TABLE Employee (
+                                      EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+                                      UserID INT,
+                                      FirstName VARCHAR(50),
+                                      LastName VARCHAR(50),
+                                      PositionID INT,
+                                      ManagerID INT,
+                                      Email VARCHAR(100),
+                                      FOREIGN KEY (`PositionID`) REFERENCES `Position`(`PositionID`),
+                                      FOREIGN KEY (`ManagerID`) REFERENCES `Employee`(`EmployeeID`),
+                                      FOREIGN KEY (`UserID`) REFERENCES `User`(`UserID`)
+
+            );
+        </sql>
+        <rollback>
+            DROP TABLE Employee;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

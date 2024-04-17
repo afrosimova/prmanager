@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Nastia">
+        <comment>
+            Create user table
+        </comment>
+        <sql>
+            CREATE TABLE Answers (
+                                     EmployeeSurveyID INT,
+                                     QuestionID INT,
+                                     Type ENUM('Employee', 'Manager'),
+                                     Answer TEXT,
+                                     PRIMARY KEY (EmployeeSurveyID, QuestionID),
+                                     FOREIGN KEY (`EmployeeSurveyID`) REFERENCES `EmployeeSurvey`(`EmployeeSurveyID`),
+                                     FOREIGN KEY (`QuestionID`) REFERENCES `Question`(`QuestionID`)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE Answers;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
