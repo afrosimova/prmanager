@@ -6,21 +6,21 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create ANSWERS table
         </comment>
         <sql>
-            CREATE TABLE Answers (
-                                     EmployeeSurveyID INT,
-                                     QuestionID INT,
-                                     Type ENUM('Employee', 'Manager'),
-                                     Answer TEXT,
-                                     PRIMARY KEY (EmployeeSurveyID, QuestionID),
-                                     FOREIGN KEY (`EmployeeSurveyID`) REFERENCES `EmployeeSurvey`(`EmployeeSurveyID`),
-                                     FOREIGN KEY (`QuestionID`) REFERENCES `Question`(`QuestionID`)
+            CREATE TABLE ANSWERS (
+                                     EMPLOYEE_SURVEY_ID INT,
+                                     QUESTION_ID INT,
+                                     ANSWERS_TYPE ENUM('Employee', 'Manager'),
+                                     ANSWER TEXT,
+                                     PRIMARY KEY (EMPLOYEE_SURVEY_ID, QUESTION_ID),
+                                     FOREIGN KEY (`EMPLOYEE_SURVEY_ID`) REFERENCES `EMPLOYEE_SURVEY`(`EMPLOYEE_SURVEY_ID`),
+                                     FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
             );
         </sql>
         <rollback>
-            DROP TABLE Answers;
+            DROP TABLE ANSWERS;
         </rollback>
     </changeSet>
 

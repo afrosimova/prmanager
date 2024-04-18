@@ -9,15 +9,15 @@
             Create user table
         </comment>
         <sql>
-            CREATE TABLE Survey (
-                                    SurveyID INT AUTO_INCREMENT PRIMARY KEY,
-                                    dateStart DATE,
-                                    name VARCHAR(100),
-                                    dateEnd DATE
+            CREATE TABLE SURVEY (
+                                    SURVEY_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                    DATE_START DATE,
+                                    SURVEY_NAME VARCHAR(100),
+                                    DATE_END DATE
             );
         </sql>
         <rollback>
-            DROP TABLE Survey;
+            DROP TABLE SURVEY;
         </rollback>
     </changeSet>
 

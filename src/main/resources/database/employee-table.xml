@@ -6,25 +6,25 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create EMPLOYEE table
         </comment>
         <sql>
-            CREATE TABLE Employee (
-                                      EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
-                                      UserID INT,
-                                      FirstName VARCHAR(50),
-                                      LastName VARCHAR(50),
-                                      PositionID INT,
-                                      ManagerID INT,
-                                      Email VARCHAR(100),
-                                      FOREIGN KEY (`PositionID`) REFERENCES `Position`(`PositionID`),
-                                      FOREIGN KEY (`ManagerID`) REFERENCES `Employee`(`EmployeeID`),
-                                      FOREIGN KEY (`UserID`) REFERENCES `User`(`UserID`)
+            CREATE TABLE EMPLOYEE (
+                                      EMPLOYEE_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                      USER_ID INT,
+                                      FIRST_NAME VARCHAR(50),
+                                      LAST_NAME VARCHAR(50),
+                                      POSITION_ID INT,
+                                      MANAGER_ID INT,
+                                      EMAIL VARCHAR(100),
+                                      FOREIGN KEY (`POSITION_ID`) REFERENCES `POSITION`(`POSITION_ID`),
+                                      FOREIGN KEY (`MANAGER_ID`) REFERENCES `EMPLOYEE`(`EMPLOYEE_ID`),
+                                      FOREIGN KEY (`USER_ID`) REFERENCES `USER`(`USER_ID`)
 
             );
         </sql>
         <rollback>
-            DROP TABLE Employee;
+            DROP TABLE EMPLOYEE;
         </rollback>
     </changeSet>
 

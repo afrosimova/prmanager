@@ -6,19 +6,19 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create POSITION_QUESTION table
         </comment>
         <sql>
-            CREATE TABLE PositionQuestion (
-                                              PositionID INT,
-                                              QuestionID INT,
-                                              PRIMARY KEY (PositionID, QuestionID),
-                                              FOREIGN KEY (`PositionID`) REFERENCES `Position`(`PositionID`),
-                                              FOREIGN KEY (`QuestionID`) REFERENCES `Question`(`QuestionID`)
+            CREATE TABLE POSITION_QUESTION (
+                                              POSITION_ID INT,
+                                              QUESTION_ID INT,
+                                              PRIMARY KEY (POSITION_ID, QUESTION_ID),
+                                              FOREIGN KEY (`POSITION_ID`) REFERENCES `POSITION`(`POSITION_ID`),
+                                              FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
             );
         </sql>
         <rollback>
-            DROP TABLE PositionQuestion;
+            DROP TABLE POSITION_QUESTION;
         </rollback>
     </changeSet>
 

@@ -6,23 +6,23 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create EMPLOYEE_SURVEY table
         </comment>
         <sql>
-            CREATE TABLE EmployeeSurvey (
-                                            EmployeeSurveyID INT AUTO_INCREMENT PRIMARY KEY,
-                                            EmployeeID INT,
-                                            SurveyID INT,
-                                            ManagerID INT,
-                                            EmpCompleted BOOLEAN DEFAULT FALSE,
-                                            ManCompleted BOOLEAN DEFAULT FALSE,
-                                            FOREIGN KEY (`EmployeeID`) REFERENCES `Employee`(`EmployeeID`),
-                                            FOREIGN KEY (`SurveyID`) REFERENCES `Survey`(`SurveyID`),
-                                            FOREIGN KEY (`ManagerID`) REFERENCES `Employee`(`EmployeeID`)
+            CREATE TABLE EMPLOYEE_SURVEY (
+                                            EMPLOYEE_SURVEY_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                            EMPLOYEE_ID INT,
+                                            SURVEY_ID INT,
+                                            MANAGER_ID INT,
+                                            EMP_COMPLETED BOOLEAN DEFAULT FALSE,
+                                            MAN_COMPLETED BOOLEAN DEFAULT FALSE,
+                                            FOREIGN KEY (`EMPLOYEE_ID`) REFERENCES `EMPLOYEE`(`EMPLOYEE_ID`),
+                                            FOREIGN KEY (`SURVEY_ID`) REFERENCES `SURVEY`(`SURVEY_ID`),
+                                            FOREIGN KEY (`MANAGER_ID`) REFERENCES `EMPLOYEE`(`EMPLOYEE_ID`)
             );
         </sql>
         <rollback>
-            DROP TABLE EmployeeSurvey;
+            DROP TABLE EMPLOYEE_SURVEY;
         </rollback>
     </changeSet>
 

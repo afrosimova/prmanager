@@ -6,16 +6,16 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create POSITION table
         </comment>
         <sql>
-            CREATE TABLE Position (
-                                      PositionID INT AUTO_INCREMENT PRIMARY KEY,
-                                      name VARCHAR(100)
+            CREATE TABLE POSITION (
+                                      POSITION_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                      POSITION_NAME VARCHAR(100)
             );
         </sql>
         <rollback>
-            DROP TABLE Position;
+            DROP TABLE POSITION;
         </rollback>
     </changeSet>
 

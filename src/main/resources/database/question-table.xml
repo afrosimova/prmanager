@@ -6,17 +6,17 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet id="1" author="Nastia">
         <comment>
-            Create user table
+            Create QUESTION table
         </comment>
         <sql>
-            CREATE TABLE Question (
-                                      QuestionID INT AUTO_INCREMENT PRIMARY KEY,
-                                      text TEXT,
-                                      answers TEXT
+            CREATE TABLE QUESTION (
+                                      QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                      TEXT TEXT,
+                                      ANSWERS TEXT
             );
         </sql>
         <rollback>
-            DROP TABLE Question;
+            DROP TABLE QUESTION;
         </rollback>
     </changeSet>
 

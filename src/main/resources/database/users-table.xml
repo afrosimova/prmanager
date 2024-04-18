@@ -9,15 +9,15 @@
             Create user table
         </comment>
         <sql>
-            CREATE TABLE User (
-                                  UserID INT AUTO_INCREMENT PRIMARY KEY,
-                                  login VARCHAR(50) UNIQUE,
-                                  password VARCHAR(255),
-                                  isAdmin BOOLEAN
+            CREATE TABLE USER (
+                                  USER_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                  LOGIN VARCHAR(50) UNIQUE,
+                                  PASSWORD VARCHAR(255),
+                                  IS_ADMIN BOOLEAN
             );
         </sql>
         <rollback>
-            DROP TABLE User;
+            DROP TABLE USER;
         </rollback>
     </changeSet>
 
