@@ -13,4 +13,5 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     <include file="database/question-table.xml"/>
     <include file="database/answers-table.xml"/>
     <include file="database/positionQuestion-table.xml"/>
+    <include file="database/data.xml"/>
 </databaseChangeLog>

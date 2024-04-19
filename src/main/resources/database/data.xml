@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Nastia">
+        <comment>
+            Create users
+        </comment>
+        <sql>
+            insert into USER (LOGIN_USER, PASSWORD, IS_ADMIN)
+            values ('Admin', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', true);
+            insert into USER (LOGIN_USER, PASSWORD, IS_ADMIN)
+            values ('Anastasiia', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+        </sql>
+        <rollback>
+            delete from USER where LOGIN_USER in ('Admin', 'Anastasiia');
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
