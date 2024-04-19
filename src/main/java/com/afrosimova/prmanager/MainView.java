@@ -17,7 +17,7 @@ class MainView extends VerticalLayout {
         this.userService = userService;
 
         User user = User.builder()
-                .login("ed")
+                .loginUser("ed")
                 .password("ede")
                 .isAdmin(true)
                 .build();

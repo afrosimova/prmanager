@@ -11,7 +11,7 @@
         <sql>
             CREATE TABLE USER (
                                   USER_ID INT AUTO_INCREMENT PRIMARY KEY,
-                                  LOGIN VARCHAR(50) UNIQUE,
+                                  LOGIN_USER VARCHAR(50) UNIQUE,
                                   PASSWORD VARCHAR(255),
                                   IS_ADMIN BOOLEAN
             );

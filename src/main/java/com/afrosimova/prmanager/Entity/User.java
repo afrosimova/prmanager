@@ -14,7 +14,7 @@ import lombok.*;
 public class User {
         @Id
         private long userId;
-        @NotEmpty private String login = "";
+        @NotEmpty private String loginUser = "";
         @NotEmpty private String password = "";
         private boolean isAdmin;
 }
