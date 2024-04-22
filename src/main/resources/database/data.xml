@@ -9,13 +9,48 @@
             Create users
         </comment>
         <sql>
-            insert into USER (LOGIN_USER, PASSWORD, IS_ADMIN)
-            values ('Admin', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', true);
-            insert into USER (LOGIN_USER, PASSWORD, IS_ADMIN)
-            values ('Anastasiia', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (1, 'Admin', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', true);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (2, 'Anastasiia', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (1, 'JUNIOR DEVELOPER');
+
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (1, 2, 'nastia','AFROSIMOVA', 1, NULL, 'aa@gmail.com' );
+
+            insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
+            values (1, '2023-01-02 04:03:05', 'YEAR SURVEY 2024', '2024-01-02 05:06:07');
+
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (1,1,1,1,true, false);
+
+            insert into QUESTION (QUESTION_ID, TEXT, ANSWERS)
+            values (1, 'HOW ARE YOU', 4);
+            insert into QUESTION (QUESTION_ID, TEXT, ANSWERS)
+            values (2, 'HOW ARE YOU DO', 2);
+            insert into QUESTION (QUESTION_ID, TEXT, ANSWERS)
+            values (3, 'QUESTION 3', 0);
+
+            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (1, 1, 1);
+            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (1, 2, 2);
+            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (1, 3, 3);
+
+            insert into ANSWERS (EMPLOYEE_SURVEY_ID, QUESTION_ID, ANSWERS_TYPE, ANSWER)
+            values (1, 1, 'Employee', 'GOOD');
         </sql>
         <rollback>
             delete from USER where LOGIN_USER in ('Admin', 'Anastasiia');
+            delete from POSITION where POSITION_NAME in ('JUNIOR DEVELOPER');
+            delete from EMPLOYEE where LAST_NAME in ('AFROSIMOVA');
+            delete from SURVEY where SURVEY_NAME in ('YEAR SURVEY 2024');
+            delete from EMPLOYEE_SURVEY where EMPLOYEE_SURVEY_ID in (1);
+            delete from QUESTION where TEXT in ('HOW ARE YOU', 'HOW ARE YOU DO', 'QUESTION 3');
+            delete from POSITION_QUESTION where POSITION_ID in (1);
+            delete from ANSWERS where ANSWER_TYPE in ('Employee');
         </rollback>
     </changeSet>
 

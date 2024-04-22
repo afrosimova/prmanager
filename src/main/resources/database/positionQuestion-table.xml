@@ -10,12 +10,14 @@
         </comment>
         <sql>
             CREATE TABLE POSITION_QUESTION (
-                                              POSITION_ID INT,
-                                              QUESTION_ID INT,
-                                              PRIMARY KEY (POSITION_ID, QUESTION_ID),
-                                              FOREIGN KEY (`POSITION_ID`) REFERENCES `POSITION`(`POSITION_ID`),
-                                              FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
+                                               POSITION_QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                               POSITION_ID INT,
+                                               QUESTION_ID INT,
+                                               QUESTION_ORDER INT,
+                                               FOREIGN KEY (`POSITION_ID`) REFERENCES `POSITION`(`POSITION_ID`),
+                                               FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
             );
+            ALTER TABLE POSITION_QUESTION AUTO_INCREMENT=1001;
         </sql>
         <rollback>
             DROP TABLE POSITION_QUESTION;

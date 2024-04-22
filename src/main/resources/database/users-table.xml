@@ -13,8 +13,10 @@
                                   USER_ID INT AUTO_INCREMENT PRIMARY KEY,
                                   LOGIN_USER VARCHAR(50) UNIQUE,
                                   PASSWORD VARCHAR(255),
-                                  IS_ADMIN BOOLEAN
+                                  IS_ADMIN BOOLEAN,
+                                  CONSTRAINT UC_User UNIQUE (`LOGIN_USER`)
             );
+            ALTER TABLE USER AUTO_INCREMENT=1001;
         </sql>
         <rollback>
             DROP TABLE USER;

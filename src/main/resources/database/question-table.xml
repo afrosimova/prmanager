@@ -12,8 +12,9 @@
             CREATE TABLE QUESTION (
                                       QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
                                       TEXT TEXT,
-                                      ANSWERS TEXT
+                                      ANSWERS INT
             );
+            ALTER TABLE QUESTION AUTO_INCREMENT=1001;
         </sql>
         <rollback>
             DROP TABLE QUESTION;

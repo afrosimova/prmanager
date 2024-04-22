@@ -15,6 +15,7 @@
                                     SURVEY_NAME VARCHAR(100),
                                     DATE_END DATE
             );
+            ALTER TABLE SURVEY AUTO_INCREMENT=1001;
         </sql>
         <rollback>
             DROP TABLE SURVEY;
