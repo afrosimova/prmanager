@@ -12,6 +12,7 @@
             insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
             values (1, 'Admin', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', true);
             insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+
             values (2, 'Anastasiia', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
             insert into POSITION (POSITION_ID, POSITION_NAME)
             values (1, 'JUNIOR DEVELOPER');
@@ -21,9 +22,13 @@
 
             insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
             values (1, '2023-01-02 04:03:05', 'YEAR SURVEY 2024', '2024-01-02 05:06:07');
+            insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
+            values (2, '2023-01-02 04:03:05', 'YEAR SURVEY 2024', '2024-01-02 05:06:07');
 
             insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
             values (1,1,1,1,true, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (2,1,2,1,false, true);
 
             insert into QUESTION (QUESTION_ID, TEXT, ANSWERS)
             values (1, 'HOW ARE YOU', 4);
@@ -32,25 +37,25 @@
             insert into QUESTION (QUESTION_ID, TEXT, ANSWERS)
             values (3, 'QUESTION 3', 0);
 
-            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
-            values (1, 1, 1);
-            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
-            values (1, 2, 2);
-            insert into POSITION_QUESTION (POSITION_ID, QUESTION_ID, QUESTION_ORDER)
-            values (1, 3, 3);
+            insert into POSITION_QUESTION (POSITION_QUESTION_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (1, 1, 1, 1);
+            insert into POSITION_QUESTION (POSITION_QUESTION_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (2, 1, 2, 2);
+            insert into POSITION_QUESTION (POSITION_QUESTION_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (3, 1, 3, 3);
 
             insert into ANSWERS (EMPLOYEE_SURVEY_ID, QUESTION_ID, ANSWERS_TYPE, ANSWER)
             values (1, 1, 'Employee', 'GOOD');
         </sql>
         <rollback>
-            delete from USER where LOGIN_USER in ('Admin', 'Anastasiia');
-            delete from POSITION where POSITION_NAME in ('JUNIOR DEVELOPER');
-            delete from EMPLOYEE where LAST_NAME in ('AFROSIMOVA');
-            delete from SURVEY where SURVEY_NAME in ('YEAR SURVEY 2024');
+            delete from USER where USER_ID in (1, 2);
+            delete from POSITION where POSITION_ID in (1);
+            delete from EMPLOYEE where EMPLOYEE_ID in (1);
+            delete from SURVEY where SURVEY_ID in (1);
             delete from EMPLOYEE_SURVEY where EMPLOYEE_SURVEY_ID in (1);
-            delete from QUESTION where TEXT in ('HOW ARE YOU', 'HOW ARE YOU DO', 'QUESTION 3');
-            delete from POSITION_QUESTION where POSITION_ID in (1);
-            delete from ANSWERS where ANSWER_TYPE in ('Employee');
+            delete from QUESTION where QUESTION_ID in (1,2,3);
+            delete from POSITION_QUESTION where POSITION_QUESTION_ID in (1,2,3);
+            delete from ANSWERS where EMPLOYEE_SURVEY_ID in (1);
         </rollback>
     </changeSet>
 

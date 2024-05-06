@@ -12,8 +12,10 @@ import lombok.*;
 @NoArgsConstructor
 public class Question {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "QUESTION_ID")
     private long questionId;
-    @NotEmpty private String text = "";
+    @NotEmpty private String text;
     @NotEmpty private int answers;
 }
 

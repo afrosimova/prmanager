@@ -20,8 +20,10 @@ public class PositionQuestion {
     @Column(name = "QUESTION_ORDER")
     @NotEmpty private int questionOrder;
     @ManyToOne
+    @JoinColumn(name = "POSITION_ID")
     private Position position;
     @ManyToOne
+    @JoinColumn(name = "QUESTION_ID")
     private Question question;
 }
 
