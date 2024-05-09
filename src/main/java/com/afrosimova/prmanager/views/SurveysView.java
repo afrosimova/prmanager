@@ -1,10 +1,10 @@
-package com.afrosimova.prmanager;
+package com.afrosimova.prmanager.views;
 
+import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
 import com.afrosimova.prmanager.services.EmployeeSurveyService;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,15 +12,15 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
-@Route(value = "", layout = MainContentLayout.class)
+@Route(value = "surveys", layout = MainContentLayout.class)
 @RolesAllowed("USER")
-public class EmployeeView extends VerticalLayout implements HasDynamicTitle {
+public class SurveysView extends VerticalLayout implements HasDynamicTitle {
     Grid<EmployeeSurvey> grid = new Grid<>(EmployeeSurvey.class);
     TextField nameFilterText = new TextField();
     TextField emailFilterText = new TextField();
     EmployeeSurveyService service;
 
-    public EmployeeView(EmployeeSurveyService employeeSurveyService) {
+    public SurveysView(EmployeeSurveyService employeeSurveyService) {
         this.service = employeeSurveyService;
         addClassName("list-view");
         setSizeFull();
@@ -43,19 +43,33 @@ public class EmployeeView extends VerticalLayout implements HasDynamicTitle {
     }
 
     private void configureGrid() {
-        grid.addClassNames("EMPLOYEE_SURVEY_GRID");
         grid.setSizeFull();
         grid.setColumns();
-        grid.addColumn(es -> es.getEmployeeSurveyId()).setHeader("айді");
-        grid.addColumns("empCompleted", "manCompleted");
-        grid.addColumn(es -> es.getSurvey().getSurveyName()).setHeader("імя");
-//        grid.addColumn(contact -> contact.getManager().setHeader("MANAGER_ID");
+        grid.addColumn(EmployeeSurvey::getEmployeeSurveyId).setHeader("id");
+        grid.addColumn(es -> es.getSurvey().getSurveyName()).setHeader("Назва");
+        grid.addColumn(es -> es.getSurvey().getDate()).setHeader("Дата початку");
+        grid.addColumn(es -> es.getSurvey().getDateEnd()).setHeader("Дата завершення");
+        grid.addComponentColumn((item) -> {
+            Checkbox checkBox = new Checkbox();
+            checkBox.setValue(item.isEmpCompleted());
+            checkBox.setReadOnly(true);
+            return checkBox;
+        }).setHeader("Заповнено співробітником");
+        grid.addComponentColumn((item) -> {
+            Checkbox checkBox = new Checkbox();
+            checkBox.setValue(item.isManCompleted());
+            checkBox.setReadOnly(true);
+            return checkBox;
+        }).setHeader("Заповнено менеджером");
 
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-
-//        grid.asSingleSelect().addValueChangeListener(event ->
-//                editAgency(event.getValue()));
+        grid.addItemDoubleClickListener(listener -> {
+                    getUI().ifPresent(a -> {
+                        a.navigate("survey/" + listener.getItem().getEmployeeSurveyId());
+                    });
+                }
+        );
     }
 
     private void updateList() {

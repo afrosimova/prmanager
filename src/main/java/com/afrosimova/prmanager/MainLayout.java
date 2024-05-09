@@ -2,8 +2,9 @@ package com.afrosimova.prmanager;
 import java.util.Optional;
 
 //import com.afrosimova.prmanager.ExitView;
-//import com.afrosimova.prmanager.SurveyView;
+//import com.afrosimova.prmanager.views.SurveyView;
 import com.afrosimova.prmanager.security.SecurityService;
+import com.afrosimova.prmanager.views.SurveysView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -84,8 +85,8 @@ public class MainLayout extends AppLayout {
 
     private Tab[] createMenuItems() {
         return new Tab[] {
-                new Tab(createRouterLink("Employee", VaadinIcon.HOME, EmployeeView.class)),
-                new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
+                new Tab(createRouterLink("Surveys", VaadinIcon.LIST, SurveysView.class)),
+               // new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
                 //new Tab(createRouterLink("Result", VaadinIcon.LIST, ResultView.class)),
                 //new Tab(createRouterLink("Error", VaadinIcon.WARNING, org.springframework.samples.petclinic.ui.view.ExitView.class))
         };

@@ -16,6 +16,7 @@ public class Question {
     @Column(name = "QUESTION_ID")
     private long questionId;
     @NotEmpty private String text;
+    @NotEmpty private int type;
     @NotEmpty private int answers;
 }
 
