@@ -1,8 +1,5 @@
 package com.afrosimova.prmanager;
-import java.util.Optional;
 
-//import com.afrosimova.prmanager.ExitView;
-//import com.afrosimova.prmanager.views.SurveyView;
 import com.afrosimova.prmanager.security.SecurityService;
 import com.afrosimova.prmanager.views.SurveysView;
 import com.vaadin.flow.component.Component;
@@ -21,10 +18,8 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-//import org.springframework.samples.petclinic.ui.view.ErrorView;
-//import org.springframework.samples.petclinic.ui.view.WelcomeView;
-//import org.springframework.samples.petclinic.ui.view.owner.OwnersFindView;
-//import org.springframework.samples.petclinic.ui.view.vet.VetsView;
+
+import java.util.Optional;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -41,35 +36,34 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createHeaderContent() {
-
-        String u = securityService.getAuthenticatedUser().getUsername();
-        Button logout = new Button("Log out " + u, e -> securityService.logout()); // <2>
-
-        var header = new HorizontalLayout(new DrawerToggle(), logout);
-
-        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-        header.setWidthFull();
-        header.addClassNames(
-                LumoUtility.Padding.Vertical.NONE,
-                LumoUtility.Padding.Horizontal.MEDIUM);
-
-        addToNavbar(header);
-
         final HorizontalLayout layout = new HorizontalLayout();
         layout.getThemeList().add("dark");
         layout.setPadding(true);
         layout.setSpacing(false);
         layout.setId("header");
         layout.setWidthFull();
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+        layout.setAlignItems(FlexComponent.Alignment.END);
         layout.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
         final Span brand = new Span();
         final Anchor brandLink = new Anchor("/", brand);
         brandLink.addClassName("navbar-brand");
         layout.add(brandLink);
-
         layout.add(menu);
+
+        String u = securityService.getAuthenticatedUser().getUsername();
+        Button logout = new Button("Log out " + u, e -> securityService.logout()); // <2>
+        var header = new HorizontalLayout(logout);
+        //header.getStyle().set( "border" , "6px dotted DarkOrange" ) ;
+        //header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
+        //header.setAlignItems(FlexComponent.Alignment.END);
+        header.setJustifyContentMode(JustifyContentMode.END);
+        header.setWidthFull();
+        header.addClassNames(
+                LumoUtility.Padding.Vertical.NONE,
+                LumoUtility.Padding.Horizontal.MEDIUM);
+
+        layout.add(header);
 
         return layout;
     }
@@ -84,18 +78,18 @@ public class MainLayout extends AppLayout {
     }
 
     private Tab[] createMenuItems() {
-        return new Tab[] {
+        return new Tab[]{
                 new Tab(createRouterLink("Surveys", VaadinIcon.LIST, SurveysView.class)),
-               // new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
+                new Tab(createRouterLink("Surveys", VaadinIcon.LIST, SurveysView.class)),
+                // new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
                 //new Tab(createRouterLink("Result", VaadinIcon.LIST, ResultView.class)),
                 //new Tab(createRouterLink("Error", VaadinIcon.WARNING, org.springframework.samples.petclinic.ui.view.ExitView.class))
         };
     }
 
-    private RouterLink createRouterLink(String translationKey, VaadinIcon viewIcon,
+    private RouterLink createRouterLink(String name, VaadinIcon viewIcon,
                                         Class<? extends Component> navigationTarget) {
-        final RouterLink routerLink =
-                new RouterLink(getTranslation(translationKey), navigationTarget);
+        final RouterLink routerLink = new RouterLink(name, navigationTarget);
         routerLink.addComponentAsFirst(viewIcon.create());
         routerLink.addClassNames("flex", "gap-s", "uppercase");
         return routerLink;

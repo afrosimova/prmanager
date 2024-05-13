@@ -4,24 +4,26 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "POSITION_QUESTION")
-@Table(name = "POSITION_QUESTION")
-public class PositionQuestion {
+@Entity(name = "SURVEY_QUESTION")
+@Table(name = "SURVEY_QUESTION")
+public class SurveyQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "POSITION_QUESTION_ID")
+    @Column(name = "SURVEY_QUESTION_ID")
     private long positionQuestionId;
     @Column(name = "QUESTION_ORDER")
     @NotEmpty private int questionOrder;
     @ManyToOne
     @JoinColumn(name = "POSITION_ID")
     private Position position;
+    @ManyToOne
+    @JoinColumn(name = "SURVEY_ID")
+    private Survey survey;
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;

@@ -1,6 +1,5 @@
 package com.afrosimova.prmanager.entities;
 
-import com.afrosimova.prmanager.AnswersType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

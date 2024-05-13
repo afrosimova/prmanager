@@ -1,8 +1,7 @@
 package com.afrosimova.prmanager.views;
 
 import com.afrosimova.prmanager.MainContentLayout;
-import com.afrosimova.prmanager.entities.EmployeeSurvey;
-import com.afrosimova.prmanager.entities.PositionQuestion;
+import com.afrosimova.prmanager.entities.SurveyQuestion;
 import com.afrosimova.prmanager.services.SurveyService;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
@@ -55,9 +54,9 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void onAttach(AttachEvent event) {
-        List<PositionQuestion> questions = surveyService.findPositionQuestionBy(employeeSurveyId);
-        questions.sort(Comparator.comparing(PositionQuestion::getQuestionOrder));
-        for (PositionQuestion question : questions) {
+        List<SurveyQuestion> questions = surveyService.findPositionQuestionBy(employeeSurveyId);
+        questions.sort(Comparator.comparing(SurveyQuestion::getQuestionOrder));
+        for (SurveyQuestion question : questions) {
             switch (question.getQuestion().getType()) {
                 case 1 -> renderTextQuestion(question);
                 case 2 -> renderCheckBoxQuestion(question);
@@ -77,19 +76,19 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         add(submitButton);
     }
 
-    private void renderDropdownQuestion(PositionQuestion question) {
+    private void renderDropdownQuestion(SurveyQuestion question) {
         Select<String> dropdown = new Select<>();
         dropdown.setLabel(question.getQuestion().getText());
         dropdown.setItems("Варіант 1", "Варіант 2", "Варіант 3", "Варіант 4", "Варіант 5");
         add(dropdown);
     }
 
-    private void renderCheckBoxQuestion(PositionQuestion question) {
+    private void renderCheckBoxQuestion(SurveyQuestion question) {
         Checkbox checkbox = new Checkbox(question.getQuestion().getText());
         add(checkbox);
     }
 
-    private void renderRadioButtonQuestion(PositionQuestion question) {
+    private void renderRadioButtonQuestion(SurveyQuestion question) {
         RadioButtonGroup<String> optionsGroup = new RadioButtonGroup<>();
         optionsGroup.setLabel(question.getQuestion().getText());
         optionsGroup.setItems("Варіант 1", "Варіант 2", "Варіант 3", "Варіант 4");
@@ -97,13 +96,13 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         add(optionsGroup);
     }
 
-    private void renderTextQuestion(PositionQuestion question) {
+    private void renderTextQuestion(SurveyQuestion question) {
         TextField questionField = new TextField(question.getQuestion().getText());
         questionField.setWidth("400px");
         add(questionField);
     }
 
-    private void renderQuestion(PositionQuestion question) {
+    private void renderQuestion(SurveyQuestion question) {
     }
 
 //

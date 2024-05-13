@@ -59,6 +59,7 @@ public class SurveysView extends VerticalLayout implements HasDynamicTitle {
             Checkbox checkBox = new Checkbox();
             checkBox.setValue(item.isManCompleted());
             checkBox.setReadOnly(true);
+            checkBox.setEnabled(false);
             return checkBox;
         }).setHeader("Заповнено менеджером");
 
