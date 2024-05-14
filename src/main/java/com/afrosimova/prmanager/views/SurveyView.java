@@ -6,6 +6,8 @@ import com.afrosimova.prmanager.services.SurveyService;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
@@ -13,8 +15,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 
+//import java.lang.classfile.Label;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,18 +27,8 @@ import java.util.List;
 @RolesAllowed("USER")
 public class SurveyView extends VerticalLayout implements HasUrlParameter<String> {
     private long employeeSurveyId;
-    //TextField questionText1 = new TextField("blabla");
-
-    //private TextField questionField;
-    private RadioButtonGroup<String> optionsGroup;
 
     //Grid<EmployeeSurvey> grid = new Grid<>(EmployeeSurvey.class);
-    TextField nameFilterText = new TextField();
-    TextField emailFilterText = new TextField();
-    //        TextField title = new TextField("Title");
-//        TextField preamble = new TextField("Preamble");
-//        TextField description = new TextField("Description");
-//        TextField category = new TextField("Category");
     SurveyService surveyService;
     //QuestionService questionService;
     Button submit = new Button("Submit");
@@ -78,8 +73,10 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 
     private void renderDropdownQuestion(SurveyQuestion question) {
         Select<String> dropdown = new Select<>();
+        //Label label = new Label(question.getQuestion().getText());
         dropdown.setLabel(question.getQuestion().getText());
-        dropdown.setItems("Варіант 1", "Варіант 2", "Варіант 3", "Варіант 4", "Варіант 5");
+        dropdown.setItems("1", "2", "3", "4", "5");
+        dropdown.setWidthFull();
         add(dropdown);
     }
 
@@ -89,11 +86,61 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
     }
 
     private void renderRadioButtonQuestion(SurveyQuestion question) {
+        VerticalLayout layout = new VerticalLayout();
+        layout.addClassNames(
+                LumoUtility.Border.BOTTOM
+        );
+       // layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        layout.setWidthFull();
+//        layout.getStyle().set("border", "1px solid Navy");
+
+        Label label = new Label();
+        label.addClassNames(
+                LumoUtility.TextColor.PRIMARY,
+                LumoUtility.FontSize.MEDIUM
+        );
+        label.setText(question.getQuestion().getText());
+        layout.add(label);
+
+        Label descriptionLabel = new Label();
+        descriptionLabel.addClassNames(
+                LumoUtility.TextColor.BODY,
+                LumoUtility.FontSize.XSMALL
+        );
+        descriptionLabel.setText(question.getQuestion().getDescription());
+        descriptionLabel.setWidthFull();
+        layout.add(descriptionLabel);
+
         RadioButtonGroup<String> optionsGroup = new RadioButtonGroup<>();
-        optionsGroup.setLabel(question.getQuestion().getText());
-        optionsGroup.setItems("Варіант 1", "Варіант 2", "Варіант 3", "Варіант 4");
-        optionsGroup.getStyle().set("flexDirection", "column"); // Розташувати по вертикалі
-        add(optionsGroup);
+//        label.addClassNames(
+//                LumoUtility.TextColor.BODY,
+//                LumoUtility.FontSize.SMALL
+//        );
+//        optionsGroup.getStyle().set("overflow-y", "auto");
+//        optionsGroup.setLabel(question.getQuestion().getDescription());
+        optionsGroup.setWidthFull();
+        switch (question.getQuestion().getAnswers()) {
+            case 3:
+                optionsGroup.setItems("Так", "Частково", "Ні");
+                break;
+            case 4:
+                optionsGroup.setItems("Відмінно", "Добре", "Задовільно", "Не задовільно");
+                break;
+            case 5:
+                optionsGroup.setItems("Відмінно", "Добре", "Задовільно", "Не задовільно", "Погано");
+                break;
+            default:
+                List<String> list = new ArrayList<>();
+                for (int i = 0; i < question.getQuestion().getAnswers(); i++) {
+                    list.add(Integer.toString(i + 1));
+                }
+                optionsGroup.setItems(list);
+                break;
+
+        }
+     //   optionsGroup.getStyle().set("flexDirection", "column"); // Розташувати по вертикалі
+        layout.add(optionsGroup);
+        add(layout);
     }
 
     private void renderTextQuestion(SurveyQuestion question) {
