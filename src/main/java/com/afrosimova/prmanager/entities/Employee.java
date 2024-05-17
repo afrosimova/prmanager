@@ -32,6 +32,8 @@ public class Employee {
     @NotEmpty private Employee manager;
     @Column(name = "EMAIL")
     @NotEmpty private String email = "";
+
+
 }
 
 

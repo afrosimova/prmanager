@@ -1,5 +1,6 @@
 package com.afrosimova.prmanager.views;
 
+import com.afrosimova.prmanager.repositories.EmployeeRepository;
 import com.afrosimova.prmanager.repositories.EmployeeSurveyRepository;
 //import com.afrosimova.prmanager.repositories.PositionQuestionRepository;
 import com.afrosimova.prmanager.repositories.SurveyQuestionRepository;
@@ -15,12 +16,17 @@ class MainView extends VerticalLayout {
     //private final UserService userService;
     private final SurveyQuestionRepository surveyQuestionRepository;
     private final EmployeeSurveyRepository employeeSurveyRepository;
+
+    private final EmployeeRepository employeeRepository;
+
     MainView(
             //EmployeeSurveyRepository employeeSurveyRepository
             SurveyQuestionRepository surveyQuestionRepository, EmployeeSurveyRepository employeeSurveyRepository
-            ) {
+            ,EmployeeRepository employeeRepository) {
         this.surveyQuestionRepository = surveyQuestionRepository;
         this.employeeSurveyRepository = employeeSurveyRepository;
+        this.employeeRepository = employeeRepository;
+
         //add(new H1("Hello, world!"));
         //this.employeeSurveyRepository = employeeSurveyRepository;
 
@@ -37,5 +43,8 @@ class MainView extends VerticalLayout {
 
         var survey = surveyQuestionRepository.findSurveyQuestionBy(1);
         System.out.println(survey);
+
+//        var employee = employeeRepository.findEmployee(1);
+//        System.out.println(employee);
     }
 }

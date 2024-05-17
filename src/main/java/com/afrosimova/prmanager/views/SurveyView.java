@@ -1,41 +1,44 @@
 package com.afrosimova.prmanager.views;
 
 import com.afrosimova.prmanager.MainContentLayout;
+import com.afrosimova.prmanager.entities.Answers;
 import com.afrosimova.prmanager.entities.SurveyQuestion;
+import com.afrosimova.prmanager.services.AnswersService;
 import com.afrosimova.prmanager.services.SurveyService;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
+import lombok.RequiredArgsConstructor;
+import org.codehaus.plexus.util.StringUtils;
 
-//import java.lang.classfile.Label;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.afrosimova.prmanager.entities.AnswersType.EMPLOYEE;
 
 @Route(value = "survey", layout = MainContentLayout.class)
 @RolesAllowed("USER")
+@RequiredArgsConstructor
 public class SurveyView extends VerticalLayout implements HasUrlParameter<String> {
+    private final SurveyService surveyService;
+    private final AnswersService answersService;
     private long employeeSurveyId;
-
-    //Grid<EmployeeSurvey> grid = new Grid<>(EmployeeSurvey.class);
-    SurveyService surveyService;
-    //QuestionService questionService;
-    Button submit = new Button("Submit");
-
-    public SurveyView(SurveyService surveyService/*,QuestionService questionService*/) {
-        this.surveyService = surveyService;
-    }
+    private Map<Long, SurveyQuestion> questionMap;
+    private Map<Long, Answers> answersMap;
+    private Map<Long, Component> answersComponentMap = new HashMap<>();
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
@@ -49,48 +52,76 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void onAttach(AttachEvent event) {
+        answersComponentMap.clear();
         List<SurveyQuestion> questions = surveyService.findPositionQuestionBy(employeeSurveyId);
+        questionMap = questions.stream()
+                .collect(Collectors.toMap(SurveyQuestion::getPositionQuestionId, q -> q));
+        List<Answers> answersList = answersService.findAnswers(employeeSurveyId, EMPLOYEE.name());
+        answersMap = answersList.stream()
+                .collect(Collectors.toMap(a -> a.getQuestion().getQuestionId(), a -> a));
         questions.sort(Comparator.comparing(SurveyQuestion::getQuestionOrder));
         for (SurveyQuestion question : questions) {
-            switch (question.getQuestion().getType()) {
-                case 1 -> renderTextQuestion(question);
-                case 2 -> renderCheckBoxQuestion(question);
-                case 3 -> renderRadioButtonQuestion(question);
-                case 4 -> renderDropdownQuestion(question);
+            Answers answers = answersMap.get(question.getQuestion().getQuestionId());
+            Component questionComponent = switch (question.getQuestion().getType()) {
+                case 1 -> renderTextQuestion(question, answers);
+                case 2 -> renderCheckBoxQuestion(question, answers);
+                case 3 -> renderRadioButtonQuestion(question, answers);
+                case 4 -> renderDropdownQuestion(question, answers);
+                default -> null;
+            };
+            if (questionComponent != null) {
+                renderQuestion(question, questionComponent);
+                answersComponentMap.put(question.getQuestion().getQuestionId(), questionComponent);
             }
-            renderQuestion(question);
         }
+
         // Кнопка для підтвердження відповіді
         Button submitButton = new Button("Зберегти", e -> {
+            answersComponentMap.entrySet().stream()
+                    .forEach(es -> {
+                        String value = null;
+                        if (es.getValue() instanceof RadioButtonGroup<?>) {
+                            RadioButtonGroup<String> rbg = (RadioButtonGroup<String>) es.getValue();
+                            value = rbg.getValue();
+                        } else if (es.getValue() instanceof TextField textField) {
+                            value = textField.getValue();
+                        }
+                        if (StringUtils.isNotEmpty(value)) {
+                            Answers oldAnswers = answersMap.get(es.getKey());
+                            if (oldAnswers != null) {
+                                oldAnswers.setText(value);
+                                answersService.update(oldAnswers);
+                            } else {
+                                Answers newAnswers = answersService.create(
+                                        employeeSurveyId,
+                                        es.getKey(),
+                                        EMPLOYEE.name(),
+                                        value
+                                );
+                                answersMap.put(es.getKey(), newAnswers);
+                            }
+                            System.out.println("Saved");
+                        }
+                    });
+
 //            String question = questionField.getValue();
 //            String selectedOption = optionsGroup.getValue();
 //            System.out.println("Питання: " + question);
 //            System.out.println("Обраний варіант відповіді: " + selectedOption);
             // Тут можна додати логіку обробки відповіді
         });
-        add(submitButton);
+        final HorizontalLayout footer = new HorizontalLayout();
+        footer.addClassName("footer");
+        footer.add(submitButton);
+        add(footer);
     }
 
-    private void renderDropdownQuestion(SurveyQuestion question) {
-        Select<String> dropdown = new Select<>();
-        //Label label = new Label(question.getQuestion().getText());
-        dropdown.setLabel(question.getQuestion().getText());
-        dropdown.setItems("1", "2", "3", "4", "5");
-        dropdown.setWidthFull();
-        add(dropdown);
-    }
-
-    private void renderCheckBoxQuestion(SurveyQuestion question) {
-        Checkbox checkbox = new Checkbox(question.getQuestion().getText());
-        add(checkbox);
-    }
-
-    private void renderRadioButtonQuestion(SurveyQuestion question) {
+    private void renderQuestion(SurveyQuestion question, Component questionComponent) {
         VerticalLayout layout = new VerticalLayout();
         layout.addClassNames(
                 LumoUtility.Border.BOTTOM
         );
-       // layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        // layout.setAlignItems(FlexComponent.Alignment.BASELINE);
         layout.setWidthFull();
 //        layout.getStyle().set("border", "1px solid Navy");
 
@@ -111,6 +142,26 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         descriptionLabel.setWidthFull();
         layout.add(descriptionLabel);
 
+        layout.add(questionComponent);
+
+        add(layout);
+    }
+
+    private Component renderDropdownQuestion(SurveyQuestion question, Answers answers) {
+        Select<String> dropdown = new Select<>();
+        //Label label = new Label(question.getQuestion().getText());
+        dropdown.setLabel(question.getQuestion().getText());
+        dropdown.setItems("1", "2", "3", "4", "5");
+        dropdown.setWidthFull();
+        return dropdown;
+    }
+
+    private Component renderCheckBoxQuestion(SurveyQuestion question, Answers answers) {
+        Checkbox checkbox = new Checkbox(question.getQuestion().getText());
+        return checkbox;
+    }
+
+    private Component renderRadioButtonQuestion(SurveyQuestion question, Answers answers) {
         RadioButtonGroup<String> optionsGroup = new RadioButtonGroup<>();
 //        label.addClassNames(
 //                LumoUtility.TextColor.BODY,
@@ -120,11 +171,26 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 //        optionsGroup.setLabel(question.getQuestion().getDescription());
         optionsGroup.setWidthFull();
         switch (question.getQuestion().getAnswers()) {
+            case 2:
+                optionsGroup.setItems("1", "2");
+                optionsGroup.setRenderer(new TextRenderer<>((mn) -> switch (mn) {
+                    case "1" -> "Так";
+                    case "2" -> "Ні";
+                    default -> "";
+                }));
+                break;
             case 3:
                 optionsGroup.setItems("Так", "Частково", "Ні");
                 break;
             case 4:
-                optionsGroup.setItems("Відмінно", "Добре", "Задовільно", "Не задовільно");
+                optionsGroup.setItems("1", "2", "3", "4");
+                optionsGroup.setRenderer(new TextRenderer<>((mn) -> switch (mn) {
+                    case "1" -> "Відмінно";
+                    case "2" -> "Добре";
+                    case "3" -> "Задовільно";
+                    case "4" -> "Не задовільно";
+                    default -> "";
+                }));
                 break;
             case 5:
                 optionsGroup.setItems("Відмінно", "Добре", "Задовільно", "Не задовільно", "Погано");
@@ -138,18 +204,25 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
                 break;
 
         }
-     //   optionsGroup.getStyle().set("flexDirection", "column"); // Розташувати по вертикалі
-        layout.add(optionsGroup);
-        add(layout);
+        if (answers != null) {
+            optionsGroup.setValue(answers.getText());
+        }
+        //   optionsGroup.getStyle().set("flexDirection", "column"); // Розташувати по вертикалі
+        return optionsGroup;
     }
 
-    private void renderTextQuestion(SurveyQuestion question) {
-        TextField questionField = new TextField(question.getQuestion().getText());
-        questionField.setWidth("400px");
-        add(questionField);
-    }
-
-    private void renderQuestion(SurveyQuestion question) {
+    //    private void renderTextQuestion(SurveyQuestion question) {
+//        TextField questionField = new TextField(question.getQuestion().getText());
+//        questionField.setWidth("400px");
+//        add(questionField);
+//    }
+    private Component renderTextQuestion(SurveyQuestion question, Answers answers) {
+        TextField textField = new TextField();
+        textField.setWidthFull();
+        if (answers != null) {
+            textField.setValue(answers.getText());
+        }
+        return textField;
     }
 
 //
