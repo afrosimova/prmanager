@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Nastia">
+        <comment>
+            Create SURVEY_QUESTION table
+        </comment>
+        <sql>
+            CREATE TABLE SURVEY_QUESTION (
+                                            SURVEY_QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
+                                            SURVEY_ID INT,
+                                            POSITION_ID INT NULL,
+                                            QUESTION_ID INT,
+                                            QUESTION_ORDER INT,
+                                            FOREIGN KEY (`SURVEY_ID`) REFERENCES `SURVEY`(`SURVEY_ID`),
+                                            FOREIGN KEY (`POSITION_ID`) REFERENCES `POSITION`(`POSITION_ID`),
+                                            FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
+            );
+            ALTER TABLE SURVEY_QUESTION AUTO_INCREMENT=1001;
+        </sql>
+        <rollback>
+            DROP TABLE SURVEY_QUESTION;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

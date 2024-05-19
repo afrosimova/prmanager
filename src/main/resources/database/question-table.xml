@@ -12,6 +12,7 @@
             CREATE TABLE QUESTION (
                                       QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
                                       TEXT TEXT,
+                                      DESCRIPTION TEXT,
                                       TYPE INT,
                                       ANSWERS INT
             );

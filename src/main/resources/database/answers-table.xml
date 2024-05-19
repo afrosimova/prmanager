@@ -10,14 +10,16 @@
         </comment>
         <sql>
             CREATE TABLE ANSWERS (
+                                     ANSWERS_ID INT AUTO_INCREMENT PRIMARY KEY,
                                      EMPLOYEE_SURVEY_ID INT,
                                      QUESTION_ID INT,
-                                     ANSWERS_TYPE ENUM('Employee', 'Manager'),
+                                     ANSWERS_TYPE VARCHAR(20),
                                      ANSWER TEXT,
-                                     PRIMARY KEY (EMPLOYEE_SURVEY_ID, QUESTION_ID),
+                                     UNIQUE KEY (EMPLOYEE_SURVEY_ID, QUESTION_ID, ANSWERS_TYPE),
                                      FOREIGN KEY (`EMPLOYEE_SURVEY_ID`) REFERENCES `EMPLOYEE_SURVEY`(`EMPLOYEE_SURVEY_ID`),
                                      FOREIGN KEY (`QUESTION_ID`) REFERENCES `QUESTION`(`QUESTION_ID`)
             );
+            ALTER TABLE ANSWERS AUTO_INCREMENT=1001;
         </sql>
         <rollback>
             DROP TABLE ANSWERS;
