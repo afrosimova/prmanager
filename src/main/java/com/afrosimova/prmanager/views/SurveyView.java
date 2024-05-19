@@ -2,8 +2,10 @@ package com.afrosimova.prmanager.views;
 
 import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.Answers;
+import com.afrosimova.prmanager.entities.EmployeeSurvey;
 import com.afrosimova.prmanager.entities.SurveyQuestion;
 import com.afrosimova.prmanager.services.AnswersService;
+import com.afrosimova.prmanager.services.EmployeeSurveyService;
 import com.afrosimova.prmanager.services.SurveyService;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -35,6 +37,7 @@ import static com.afrosimova.prmanager.entities.AnswersType.EMPLOYEE;
 public class SurveyView extends VerticalLayout implements HasUrlParameter<String> {
     private final SurveyService surveyService;
     private final AnswersService answersService;
+    private final EmployeeSurveyService employeeSurveyService;
     private long employeeSurveyId;
     private Map<Long, SurveyQuestion> questionMap;
     private Map<Long, Answers> answersMap;
@@ -52,13 +55,151 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void onAttach(AttachEvent event) {
+        this.setMargin(false);
+        this.setSpacing(false);
+        this.addClassNames(LumoUtility.Border.ALL);
+        //this.getStyle().set( "border" , "2px dotted DarkOrange" ) ;
+        this.getThemeList().remove("margin");
+        this.getThemeList().remove("padding");
+
+        this.setSizeFull();
+        this.setClassName(LumoUtility.Overflow.HIDDEN);
         answersComponentMap.clear();
         List<SurveyQuestion> questions = surveyService.findPositionQuestionBy(employeeSurveyId);
-        questionMap = questions.stream()
-                .collect(Collectors.toMap(SurveyQuestion::getPositionQuestionId, q -> q));
+        questionMap = questions.stream().collect(Collectors.toMap(SurveyQuestion::getPositionQuestionId, q -> q));
         List<Answers> answersList = answersService.findAnswers(employeeSurveyId, EMPLOYEE.name());
-        answersMap = answersList.stream()
-                .collect(Collectors.toMap(a -> a.getQuestion().getQuestionId(), a -> a));
+        answersMap = answersList.stream().collect(Collectors.toMap(a -> a.getQuestion().getQuestionId(), a -> a));
+
+        renderLayout(questions);
+    }
+
+    private void renderLayout(List<SurveyQuestion> questions) {
+        add(renderHeader());
+        add(renderQuestions(questions));
+        add(renderFooter());
+    }
+
+    private Component renderHeader() {
+        EmployeeSurvey employeeSurvey = employeeSurveyService.findById(employeeSurveyId);
+        final VerticalLayout header = new VerticalLayout();
+        header.setMargin(false);
+        header.setPadding(false);
+        header.getThemeList().remove("margin");
+        header.getThemeList().remove("padding");
+        header.addClassNames(
+                LumoUtility.Background.CONTRAST_10);
+        Label label = new Label();
+        label.setText(
+                employeeSurvey.getSurvey().getSurveyName() + " (" +
+                        employeeSurvey.getSurvey().getDate() + " - " +
+                        employeeSurvey.getSurvey().getDateEnd() + ") "
+        );
+        label.addClassNames(
+                LumoUtility.TextColor.BODY,
+                LumoUtility.AlignContent.CENTER,
+                LumoUtility.TextAlignment.CENTER);
+        label.setWidthFull();
+        header.add(label);
+
+        label = new Label();
+        label.setText(
+                        "для " + employeeSurvey.getEmployee().getLastName() + " " +
+                        employeeSurvey.getEmployee().getFirstName()
+        );
+        label.addClassNames(
+                LumoUtility.TextColor.BODY,
+                LumoUtility.AlignContent.CENTER,
+                LumoUtility.TextAlignment.CENTER);
+        label.setWidthFull();
+        header.add(label);
+
+        HorizontalLayout surveyLine = new HorizontalLayout();
+        surveyLine.add(
+                renderHeaderComponent("Опитування:", employeeSurvey.getSurvey().getSurveyName()),
+                renderHeaderComponent("Дата початку:", employeeSurvey.getSurvey().getDate()),
+                renderHeaderComponent("Дата завеершення:", employeeSurvey.getSurvey().getDateEnd())
+        );
+        //header.add(surveyLine);
+
+        HorizontalLayout employeeLine = new HorizontalLayout();
+        employeeLine.add(
+                renderHeaderComponent("Співробітник:", employeeSurvey.getEmployee().getLastName() + " " +
+                        employeeSurvey.getEmployee().getFirstName()),
+                renderHeaderComponent("Посада:", employeeSurvey.getEmployee().getPosition().getPositionName()),
+                renderHeaderComponent("Email:", employeeSurvey.getEmployee().getEmail())
+        );
+        //header.add(employeeLine);
+
+        HorizontalLayout managerLine = new HorizontalLayout();
+        managerLine.add(
+                renderHeaderComponent("Менеджер:", employeeSurvey.getManager().getLastName() + " " +
+                        employeeSurvey.getEmployee().getFirstName()),
+                renderHeaderComponent("Посада:", employeeSurvey.getManager().getPosition().getPositionName()),
+                renderHeaderComponent("Email:", employeeSurvey.getManager().getEmail())
+        );
+        //header.add(managerLine);
+        return header;
+    }
+
+    private Component renderHeaderComponent(String labelName, String value) {
+        TextField component = new TextField();
+        component.getStyle().set("label-position", "left");
+        component.addThemeName("label-left");
+        component.setLabel(labelName);
+        component.setValue(value);
+        return component;
+    }
+
+    private Component renderFooter() {
+        final HorizontalLayout footer = new HorizontalLayout();
+        footer.addClassNames(
+                LumoUtility.Background.CONTRAST_10,
+                LumoUtility.TextColor.BODY,
+                LumoUtility.Padding.SMALL,
+                LumoUtility.AlignContent.CENTER,
+                LumoUtility.TextAlignment.CENTER);
+        footer.setWidthFull();
+        //footer.getStyle().set( "border" , "2px dotted DarkOrange" ) ;
+
+        footer.setMargin(false);
+        footer.setPadding(false);
+        footer.getThemeList().remove("margin");
+        Button submitButton = new Button("Зберегти", e -> {
+            answersComponentMap.entrySet().stream().forEach(es -> {
+                String value = null;
+                if (es.getValue() instanceof RadioButtonGroup<?>) {
+                    RadioButtonGroup<String> rbg = (RadioButtonGroup<String>) es.getValue();
+                    value = rbg.getValue();
+                } else if (es.getValue() instanceof TextField textField) {
+                    value = textField.getValue();
+                }
+                if (StringUtils.isNotEmpty(value)) {
+                    Answers oldAnswers = answersMap.get(es.getKey());
+                    if (oldAnswers != null) {
+                        oldAnswers.setText(value);
+                        answersService.update(oldAnswers);
+                    } else {
+                        Answers newAnswers = answersService.create(employeeSurveyId, es.getKey(), EMPLOYEE.name(), value);
+                        answersMap.put(es.getKey(), newAnswers);
+                    }
+                    System.out.println("Saved");
+                }
+            });
+        });
+        submitButton.addClassNames(LumoUtility.Background.PRIMARY);
+        submitButton.addClassNames(LumoUtility.TextColor.PRIMARY_CONTRAST);
+
+        Button finishButton = new Button("Готово");
+        finishButton.addClassNames(LumoUtility.Background.PRIMARY);
+        finishButton.addClassNames(LumoUtility.TextColor.PRIMARY_CONTRAST);
+        footer.add(submitButton, finishButton);
+        return footer;
+    }
+
+    private Component renderQuestions(List<SurveyQuestion> questions) {
+        VerticalLayout body = new VerticalLayout();
+        body.addClassNames(LumoUtility.Overflow.AUTO);
+        body.setSizeFull();
         questions.sort(Comparator.comparing(SurveyQuestion::getQuestionOrder));
         for (SurveyQuestion question : questions) {
             Answers answers = answersMap.get(question.getQuestion().getQuestionId());
@@ -70,81 +211,32 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
                 default -> null;
             };
             if (questionComponent != null) {
-                renderQuestion(question, questionComponent);
+                body.add(renderQuestion(question, questionComponent));
                 answersComponentMap.put(question.getQuestion().getQuestionId(), questionComponent);
             }
         }
-
-        // Кнопка для підтвердження відповіді
-        Button submitButton = new Button("Зберегти", e -> {
-            answersComponentMap.entrySet().stream()
-                    .forEach(es -> {
-                        String value = null;
-                        if (es.getValue() instanceof RadioButtonGroup<?>) {
-                            RadioButtonGroup<String> rbg = (RadioButtonGroup<String>) es.getValue();
-                            value = rbg.getValue();
-                        } else if (es.getValue() instanceof TextField textField) {
-                            value = textField.getValue();
-                        }
-                        if (StringUtils.isNotEmpty(value)) {
-                            Answers oldAnswers = answersMap.get(es.getKey());
-                            if (oldAnswers != null) {
-                                oldAnswers.setText(value);
-                                answersService.update(oldAnswers);
-                            } else {
-                                Answers newAnswers = answersService.create(
-                                        employeeSurveyId,
-                                        es.getKey(),
-                                        EMPLOYEE.name(),
-                                        value
-                                );
-                                answersMap.put(es.getKey(), newAnswers);
-                            }
-                            System.out.println("Saved");
-                        }
-                    });
-
-//            String question = questionField.getValue();
-//            String selectedOption = optionsGroup.getValue();
-//            System.out.println("Питання: " + question);
-//            System.out.println("Обраний варіант відповіді: " + selectedOption);
-            // Тут можна додати логіку обробки відповіді
-        });
-        final HorizontalLayout footer = new HorizontalLayout();
-        footer.addClassName("footer");
-        footer.add(submitButton);
-        add(footer);
+        return body;
     }
 
-    private void renderQuestion(SurveyQuestion question, Component questionComponent) {
+    private Component renderQuestion(SurveyQuestion question, Component questionComponent) {
         VerticalLayout layout = new VerticalLayout();
-        layout.addClassNames(
-                LumoUtility.Border.BOTTOM
-        );
-        // layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        layout.addClassNames(LumoUtility.Border.BOTTOM);
         layout.setWidthFull();
-//        layout.getStyle().set("border", "1px solid Navy");
 
         Label label = new Label();
-        label.addClassNames(
-                LumoUtility.TextColor.PRIMARY,
-                LumoUtility.FontSize.MEDIUM
-        );
+        label.addClassNames(LumoUtility.TextColor.PRIMARY, LumoUtility.FontSize.MEDIUM);
         label.setText(question.getQuestion().getText());
         layout.add(label);
 
         Label descriptionLabel = new Label();
-        descriptionLabel.addClassNames(
-                LumoUtility.TextColor.BODY,
-                LumoUtility.FontSize.XSMALL
-        );
+        descriptionLabel.addClassNames(LumoUtility.TextColor.BODY, LumoUtility.FontSize.XSMALL);
         descriptionLabel.setText(question.getQuestion().getDescription());
         descriptionLabel.setWidthFull();
         layout.add(descriptionLabel);
 
         layout.add(questionComponent);
 
-        add(layout);
+        return layout;
     }
 
     private Component renderDropdownQuestion(SurveyQuestion question, Answers answers) {
@@ -269,6 +361,5 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
 //        var email = emailFilterText.getValue() != null ? emailFilterText.getValue() : "";
 //        grid.setItems((EmployeeSurvey) surveyService.findPositionQuestionBy(1));
 //    }
-
 }
 

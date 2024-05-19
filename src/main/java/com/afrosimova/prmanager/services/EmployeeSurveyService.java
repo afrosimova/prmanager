@@ -16,4 +16,7 @@ public class EmployeeSurveyService {
         return employeeSurveyRepository.findEmployeeSurvey(userId);
     }
 
+    public EmployeeSurvey findById(Long employeeSurveyId) {
+        return employeeSurveyRepository.findById(employeeSurveyId).orElse(null);
+    }
 }

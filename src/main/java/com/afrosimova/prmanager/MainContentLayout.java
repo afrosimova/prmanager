@@ -1,13 +1,13 @@
 package com.afrosimova.prmanager;
-import java.util.Objects;
+
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
+
+import java.util.Objects;
 
 @ParentLayout(MainLayout.class)
 @Route
@@ -16,17 +16,14 @@ public class MainContentLayout extends VerticalLayout implements RouterLayout {
     private final Div content = new Div();
 
     public MainContentLayout() {
-        final HorizontalLayout footer = new HorizontalLayout(
-//                new Image("./images/vaadin.png", "Vaadin"),
-//                new Image("./images/spring-logo.svg", "Spring")
-                );
-        footer.addClassName("footer");
-
         setSizeFull();
+        this.getThemeList().remove("margin");
+        this.getThemeList().remove("padding");
+        setMargin(false);
+        setSpacing(false);
         setJustifyContentMode(JustifyContentMode.BETWEEN);
         content.setSizeFull();
-
-        add(content, footer);
+        add(content);
     }
 
     @Override
@@ -36,5 +33,4 @@ public class MainContentLayout extends VerticalLayout implements RouterLayout {
         content.removeAll();
         content.getElement().appendChild(hasElement.getElement());
     }
-
 }
