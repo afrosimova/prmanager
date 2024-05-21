@@ -1,6 +1,7 @@
 package com.afrosimova.prmanager.security;
 
 import com.afrosimova.prmanager.entities.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class MyUserPrincipal implements UserDetails {
+    @Getter
     private final User user;
 
     public MyUserPrincipal(User user) {

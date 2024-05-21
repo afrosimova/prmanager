@@ -13,7 +13,7 @@
                                             EMPLOYEE_SURVEY_ID INT AUTO_INCREMENT PRIMARY KEY,
                                             EMPLOYEE_ID INT,
                                             SURVEY_ID INT,
-                                            MANAGER_ID INT,
+                                            MANAGER_ID INT null,
                                             EMP_COMPLETED BOOLEAN DEFAULT FALSE,
                                             MAN_COMPLETED BOOLEAN DEFAULT FALSE,
                                             FOREIGN KEY (`EMPLOYEE_ID`) REFERENCES `EMPLOYEE`(`EMPLOYEE_ID`),

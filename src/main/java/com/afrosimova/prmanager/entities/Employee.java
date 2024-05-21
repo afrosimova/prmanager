@@ -33,7 +33,9 @@ public class Employee {
     @Column(name = "EMAIL")
     @NotEmpty private String email = "";
 
-
+    public String getFullName() {
+        return lastName + " " + firstName;
+    }
 }
 
 

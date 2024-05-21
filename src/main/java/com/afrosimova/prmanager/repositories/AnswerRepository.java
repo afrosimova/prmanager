@@ -14,4 +14,8 @@ public interface AnswerRepository extends JpaRepository<Answers, Long> {
             "where a.employeeSurvey.employeeSurveyId = :employeeSurveyId " +
             "and a.answersType  = :answersType")
     List<Answers> findAnswers(@Param("employeeSurveyId") long employeeSurveyId, @Param("answersType") String answersType);
+
+    @Query("select a from ANSWERS a " +
+            "where a.employeeSurvey.employeeSurveyId = :employeeSurveyId")
+    List<Answers> findAnswers(@Param("employeeSurveyId") long employeeSurveyId);
 }

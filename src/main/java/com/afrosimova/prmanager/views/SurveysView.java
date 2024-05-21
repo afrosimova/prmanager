@@ -1,40 +1,33 @@
 package com.afrosimova.prmanager.views;
 
-import com.afrosimova.prmanager.MainContentLayout;
+import com.afrosimova.prmanager.entities.AnswersType;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
+import com.afrosimova.prmanager.security.SecurityService;
 import com.afrosimova.prmanager.services.EmployeeSurveyService;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.RolesAllowed;
 
-@Route(value = "surveys", layout = MainContentLayout.class)
-@RolesAllowed("USER")
-public class SurveysView extends VerticalLayout implements HasDynamicTitle {
+import java.util.List;
+
+import static com.afrosimova.prmanager.entities.AnswersType.MANAGER;
+
+public abstract class SurveysView extends VerticalLayout implements HasDynamicTitle {
     Grid<EmployeeSurvey> grid = new Grid<>(EmployeeSurvey.class);
-    TextField nameFilterText = new TextField();
-    TextField emailFilterText = new TextField();
-    EmployeeSurveyService service;
+    EmployeeSurveyService employeeSurveyService;
+    SecurityService securityService;
 
-    public SurveysView(EmployeeSurveyService employeeSurveyService) {
-        this.service = employeeSurveyService;
+    public SurveysView(EmployeeSurveyService employeeSurveyService, SecurityService securityService) {
+        this.employeeSurveyService = employeeSurveyService;
+        this.securityService = securityService;
         addClassName("list-view");
         setSizeFull();
         configureGrid();
         updateList();
 
-        //H2 h2 = new H2(getTranslation("welcome"));
-        //Image image = new Image("./images/pets.png", getTranslation("pets"));
-
         add(getContent());
-
-//        setSizeFull();
-//        setJustifyContentMode(JustifyContentMode.CENTER);
-//        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
     }
 
     @Override
@@ -49,6 +42,13 @@ public class SurveysView extends VerticalLayout implements HasDynamicTitle {
         grid.addColumn(es -> es.getSurvey().getSurveyName()).setHeader("Назва");
         grid.addColumn(es -> es.getSurvey().getDate()).setHeader("Дата початку");
         grid.addColumn(es -> es.getSurvey().getDateEnd()).setHeader("Дата завершення");
+        if (getUserType() == MANAGER) {
+            grid.addColumn(es -> es.getEmployee().getFullName()).setHeader("Співробітник");
+            grid.addColumn(es -> es.getEmployee().getPosition().getPositionName()).setHeader("Посада");
+        }
+        if (getUserType() == AnswersType.EMPLOYEE) {
+            grid.addColumn(es -> es.getManager().getFullName()).setHeader("Менеджер");
+        }
         grid.addComponentColumn((item) -> {
             Checkbox checkBox = new Checkbox();
             checkBox.setValue(item.isEmpCompleted());
@@ -59,24 +59,29 @@ public class SurveysView extends VerticalLayout implements HasDynamicTitle {
             Checkbox checkBox = new Checkbox();
             checkBox.setValue(item.isManCompleted());
             checkBox.setReadOnly(true);
-            checkBox.setEnabled(false);
             return checkBox;
         }).setHeader("Заповнено менеджером");
 
-
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.addItemDoubleClickListener(listener -> {
-                    getUI().ifPresent(a -> {
-                        a.navigate("survey/" + listener.getItem().getEmployeeSurveyId());
-                    });
-                }
-        );
+            String path;
+            if (listener.getItem().isEmpCompleted() && listener.getItem().isManCompleted()) {
+                path = "summary_survey/";
+            } else {
+                path = getUserType() == MANAGER ? "manager_survey/" : "employee_survey/";
+            }
+            getUI().ifPresent(a -> {
+                a.navigate(path + listener.getItem().getEmployeeSurveyId());
+            });
+        });
     }
 
+    public abstract List<EmployeeSurvey> findSurveys();
+
+    public abstract AnswersType getUserType();
+
     private void updateList() {
-        var name = nameFilterText.getValue() != null ? nameFilterText.getValue() : "";
-        var email = emailFilterText.getValue() != null ? emailFilterText.getValue() : "";
-        grid.setItems(service.findEmployeeSurvey(2));
+        grid.setItems(findSurveys());
     }
 
     private HorizontalLayout getContent() {

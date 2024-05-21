@@ -20,6 +20,10 @@ public class AnswersService {
         return answerRepository.findAnswers(employeeSurveyId, answersType);
     }
 
+    public List<Answers> findAnswers(long employeeSurveyId) {
+        return answerRepository.findAnswers(employeeSurveyId);
+    }
+
     public Answers create(long employeeSurveyId, long questionId, String answersType, String value) {
         var employeeSurvey = employeeSurveyRepository.findById(employeeSurveyId).orElseThrow();
         var question = questionRepository.findById(questionId).orElseThrow();

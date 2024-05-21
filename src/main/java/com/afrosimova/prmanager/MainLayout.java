@@ -1,8 +1,7 @@
 package com.afrosimova.prmanager;
 
 import com.afrosimova.prmanager.security.SecurityService;
-import com.afrosimova.prmanager.views.EmployeeProfileView;
-import com.afrosimova.prmanager.views.SurveysView;
+import com.afrosimova.prmanager.views.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -82,8 +81,8 @@ public class MainLayout extends AppLayout {
         return new Tab[]{
                 //new Tab(createRouterLink("Employee", VaadinIcon.LIST, EmployeeProfileView.class)),
 
-                new Tab(createRouterLink("Surveys", VaadinIcon.LIST, SurveysView.class)),
-                new Tab(createRouterLink("Surveys", VaadinIcon.LIST, SurveysView.class)),
+                new Tab(createRouterLink("Співробітник", VaadinIcon.LIST, EmployeeSurveysView.class)),
+                new Tab(createRouterLink("Менеджер", VaadinIcon.LIST, ManagerSurveysView.class)),
 
                 // new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
                 //new Tab(createRouterLink("Result", VaadinIcon.LIST, ResultView.class)),

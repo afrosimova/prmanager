@@ -12,13 +12,47 @@
             insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
             values (1, 'Admin', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', true);
             insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
-
             values (2, 'Anastasiia', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (3, 'junior', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (4, 'middle', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (5, 'senior', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (6, 'techlead', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (7, 'manager', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+            insert into USER (USER_ID, LOGIN_USER, PASSWORD, IS_ADMIN)
+            values (8, 'seniormanager', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', false);
+
             insert into POSITION (POSITION_ID, POSITION_NAME)
-            values (1, 'JUNIOR DEVELOPER');
+            values (1, 'Junior Developer');
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (2, 'Middle Developer');
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (3, 'Senior Developer');
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (4, 'Tech Leader');
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (5, 'Project Manager');
+            insert into POSITION (POSITION_ID, POSITION_NAME)
+            values (6, 'Senior Project Manager');
 
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (1, 2, 'nastia','AFROSIMOVA', 1, NULL, 'aa@gmail.com' );
+            values (7, 8, 'Dontdo', 'Nothing', 6, NULL, 'seniormanager@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (6, 7, 'Do', 'Nothing', 5, 7, 'manager@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (1, 2, 'Anastasiia', 'Afrosimova', 1, 6, 'aa@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (2, 3, 'Simple', 'Jun', 1, 6, 'junior@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (3, 4, 'Just', 'Dev', 2, 6, 'middle@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (4, 5, 'Old', 'Boy', 3, 6, 'senior@gmail.com' );
+            insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
+            values (5, 6, 'Elder', 'Wolf', 4, 6, 'techleader@gmail.com' );
 
             insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
             values (1, '2023-01-02 04:03:05', 'YEAR SURVEY 2023', '2024-03-02 05:06:07');
@@ -26,9 +60,21 @@
             values (2, '2024-01-02 04:03:05', 'YEAR SURVEY 2024', '2024-09-02 05:06:07');
 
             insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
-            values (1,1,1,1,true, false);
+            values (1, 1, 1, 6, false, false);
             insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
-            values (2,1,2,1,false, true);
+            values (2, 1, 2, 6, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (3, 2, 2, 6, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (4, 3, 2, 6, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (5, 4, 2, 6, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (6, 5, 2, 6, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (7, 6, 2, 7, false, false);
+            insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
+            values (8, 7, 2, null, false, false);
 
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)
             values (1, 'Ефективність роботи', 'Відповідність обєму швидкості та якості виконаної роботи тому що вимагається очікується або встановлено стандартами.', 3, 4);
@@ -93,6 +139,26 @@
             insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
             values (14, 1, 1, 16, 11);
 
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (15, 2, 2, 12, 1);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (16, 2, 2, 13, 2);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (17, 2, 3, 11, 1);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (18, 2, 3, 14, 2);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (19, 2, 4, 10, 1);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (20, 2, 4, 13, 2);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (21, 2, 5, 12, 1);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (22, 2, 5, 14, 2);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (23, 2, 6, 10, 1);
+            insert into SURVEY_QUESTION (SURVEY_QUESTION_ID, SURVEY_ID, POSITION_ID, QUESTION_ID, QUESTION_ORDER)
+            values (24, 2, 6, 14, 2);
 
             insert into ANSWERS (ANSWERS_ID, EMPLOYEE_SURVEY_ID, QUESTION_ID, ANSWERS_TYPE, ANSWER)
             values (1, 1, 1, 'EMPLOYEE', '2');

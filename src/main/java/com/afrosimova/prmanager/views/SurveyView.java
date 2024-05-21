@@ -1,14 +1,13 @@
 package com.afrosimova.prmanager.views;
 
-import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.Answers;
+import com.afrosimova.prmanager.entities.AnswersType;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
 import com.afrosimova.prmanager.entities.SurveyQuestion;
 import com.afrosimova.prmanager.services.AnswersService;
 import com.afrosimova.prmanager.services.EmployeeSurveyService;
 import com.afrosimova.prmanager.services.SurveyService;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Label;
@@ -18,23 +17,22 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TextRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.afrosimova.prmanager.entities.AnswersType.EMPLOYEE;
+import static com.afrosimova.prmanager.entities.AnswersType.MANAGER;
 
-@Route(value = "survey", layout = MainContentLayout.class)
-@RolesAllowed("USER")
 @RequiredArgsConstructor
-public class SurveyView extends VerticalLayout implements HasUrlParameter<String> {
+public abstract class SurveyView extends VerticalLayout implements HasUrlParameter<String> {
     private final SurveyService surveyService;
     private final AnswersService answersService;
     private final EmployeeSurveyService employeeSurveyService;
@@ -42,6 +40,8 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
     private Map<Long, SurveyQuestion> questionMap;
     private Map<Long, Answers> answersMap;
     private Map<Long, Component> answersComponentMap = new HashMap<>();
+    private EmployeeSurvey employeeSurvey;
+    private Button submitButton, finishButton;
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
@@ -67,9 +67,9 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         answersComponentMap.clear();
         List<SurveyQuestion> questions = surveyService.findPositionQuestionBy(employeeSurveyId);
         questionMap = questions.stream().collect(Collectors.toMap(SurveyQuestion::getPositionQuestionId, q -> q));
-        List<Answers> answersList = answersService.findAnswers(employeeSurveyId, EMPLOYEE.name());
+        List<Answers> answersList = answersService.findAnswers(employeeSurveyId, getUserType().name());
         answersMap = answersList.stream().collect(Collectors.toMap(a -> a.getQuestion().getQuestionId(), a -> a));
-
+        employeeSurvey = employeeSurveyService.findById(employeeSurveyId);
         renderLayout(questions);
     }
 
@@ -80,19 +80,22 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
     }
 
     private Component renderHeader() {
-        EmployeeSurvey employeeSurvey = employeeSurveyService.findById(employeeSurveyId);
         final VerticalLayout header = new VerticalLayout();
         header.setMargin(false);
         header.setPadding(false);
+        header.setSpacing(false); // Вимкнути відступи між компонентами
+
         header.getThemeList().remove("margin");
         header.getThemeList().remove("padding");
         header.addClassNames(
                 LumoUtility.Background.CONTRAST_10);
         Label label = new Label();
+        SimpleDateFormat sdf = new SimpleDateFormat(
+                "MM/dd/yyyy");
         label.setText(
                 employeeSurvey.getSurvey().getSurveyName() + " (" +
-                        employeeSurvey.getSurvey().getDate() + " - " +
-                        employeeSurvey.getSurvey().getDateEnd() + ") "
+                        sdf.format(employeeSurvey.getSurvey().getDate()) + " - " +
+                        sdf.format(employeeSurvey.getSurvey().getDateEnd()) + ") "
         );
         label.addClassNames(
                 LumoUtility.TextColor.BODY,
@@ -112,34 +115,36 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
                 LumoUtility.TextAlignment.CENTER);
         label.setWidthFull();
         header.add(label);
-
-        HorizontalLayout surveyLine = new HorizontalLayout();
-        surveyLine.add(
-                renderHeaderComponent("Опитування:", employeeSurvey.getSurvey().getSurveyName()),
-                renderHeaderComponent("Дата початку:", employeeSurvey.getSurvey().getDate()),
-                renderHeaderComponent("Дата завеершення:", employeeSurvey.getSurvey().getDateEnd())
-        );
-        //header.add(surveyLine);
-
-        HorizontalLayout employeeLine = new HorizontalLayout();
-        employeeLine.add(
-                renderHeaderComponent("Співробітник:", employeeSurvey.getEmployee().getLastName() + " " +
-                        employeeSurvey.getEmployee().getFirstName()),
-                renderHeaderComponent("Посада:", employeeSurvey.getEmployee().getPosition().getPositionName()),
-                renderHeaderComponent("Email:", employeeSurvey.getEmployee().getEmail())
-        );
-        //header.add(employeeLine);
-
-        HorizontalLayout managerLine = new HorizontalLayout();
-        managerLine.add(
-                renderHeaderComponent("Менеджер:", employeeSurvey.getManager().getLastName() + " " +
-                        employeeSurvey.getEmployee().getFirstName()),
-                renderHeaderComponent("Посада:", employeeSurvey.getManager().getPosition().getPositionName()),
-                renderHeaderComponent("Email:", employeeSurvey.getManager().getEmail())
-        );
-        //header.add(managerLine);
+//
+//        HorizontalLayout surveyLine = new HorizontalLayout();
+//        surveyLine.add(
+//                renderHeaderComponent("Опитування:", employeeSurvey.getSurvey().getSurveyName()),
+//                renderHeaderComponent("Дата початку:", employeeSurvey.getSurvey().getDate().toString()),
+//                renderHeaderComponent("Дата завеершення:", employeeSurvey.getSurvey().getDateEnd().toString())
+//        );
+//        //header.add(surveyLine);
+//
+//        HorizontalLayout employeeLine = new HorizontalLayout();
+//        employeeLine.add(
+//                renderHeaderComponent("Співробітник:", employeeSurvey.getEmployee().getLastName() + " " +
+//                        employeeSurvey.getEmployee().getFirstName()),
+//                renderHeaderComponent("Посада:", employeeSurvey.getEmployee().getPosition().getPositionName()),
+//                renderHeaderComponent("Email:", employeeSurvey.getEmployee().getEmail())
+//        );
+//        //header.add(employeeLine);
+//
+//        HorizontalLayout managerLine = new HorizontalLayout();
+//        managerLine.add(
+//                renderHeaderComponent("Менеджер:", employeeSurvey.getManager().getLastName() + " " +
+//                        employeeSurvey.getEmployee().getFirstName()),
+//                renderHeaderComponent("Посада:", employeeSurvey.getManager().getPosition().getPositionName()),
+//                renderHeaderComponent("Email:", employeeSurvey.getManager().getEmail())
+//        );
+//        //header.add(managerLine);
         return header;
     }
+
+    public abstract AnswersType getUserType();
 
     private Component renderHeaderComponent(String labelName, String value) {
         TextField component = new TextField();
@@ -164,36 +169,69 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         footer.setMargin(false);
         footer.setPadding(false);
         footer.getThemeList().remove("margin");
-        Button submitButton = new Button("Зберегти", e -> {
-            answersComponentMap.entrySet().stream().forEach(es -> {
-                String value = null;
-                if (es.getValue() instanceof RadioButtonGroup<?>) {
-                    RadioButtonGroup<String> rbg = (RadioButtonGroup<String>) es.getValue();
-                    value = rbg.getValue();
-                } else if (es.getValue() instanceof TextField textField) {
-                    value = textField.getValue();
-                }
-                if (StringUtils.isNotEmpty(value)) {
-                    Answers oldAnswers = answersMap.get(es.getKey());
-                    if (oldAnswers != null) {
-                        oldAnswers.setText(value);
-                        answersService.update(oldAnswers);
-                    } else {
-                        Answers newAnswers = answersService.create(employeeSurveyId, es.getKey(), EMPLOYEE.name(), value);
-                        answersMap.put(es.getKey(), newAnswers);
-                    }
-                    System.out.println("Saved");
-                }
-            });
-        });
-        submitButton.addClassNames(LumoUtility.Background.PRIMARY);
-        submitButton.addClassNames(LumoUtility.TextColor.PRIMARY_CONTRAST);
 
-        Button finishButton = new Button("Готово");
-        finishButton.addClassNames(LumoUtility.Background.PRIMARY);
-        finishButton.addClassNames(LumoUtility.TextColor.PRIMARY_CONTRAST);
+        submitButton = new Button("Зберегти", e -> {
+            saveAnswers();
+            enableButton(submitButton, false);
+        });
+
+        finishButton = new Button("Готово");
+        finishButton.addClickListener(e -> {
+            saveAnswers();
+            enableButton(submitButton, false);
+            employeeSurveyService.finilize(getUserType(), employeeSurveyId);
+            enableButton(finishButton, false);
+            answersComponentMap.values().stream()
+                    .forEach(a -> {
+                        ((HasValueAndElement) a).setReadOnly(true);
+                    });
+        });
+        enableButton(submitButton, false);
+        enableButton(finishButton, !isReadOnly());
         footer.add(submitButton, finishButton);
         return footer;
+    }
+
+    private void enableButton(Button button, boolean enabled) {
+        if (button == null) {
+            return;
+        }
+        if (!enabled) {
+            button.setEnabled(false);
+            button.removeClassNames(LumoUtility.Background.PRIMARY,
+                    LumoUtility.TextColor.PRIMARY_CONTRAST);
+            button.addClassNames(LumoUtility.Background.BASE,
+                    LumoUtility.TextColor.DISABLED);
+        } else {
+            button.setEnabled(true);
+            button.removeClassNames(LumoUtility.Background.BASE,
+                    LumoUtility.TextColor.DISABLED);
+            button.addClassNames(LumoUtility.Background.PRIMARY,
+                    LumoUtility.TextColor.PRIMARY_CONTRAST);
+        }
+    }
+
+    private void saveAnswers() {
+        answersComponentMap.entrySet().stream().forEach(es -> {
+            String value = null;
+            if (es.getValue() instanceof RadioButtonGroup<?>) {
+                RadioButtonGroup<String> rbg = (RadioButtonGroup<String>) es.getValue();
+                value = rbg.getValue();
+            } else if (es.getValue() instanceof TextField textField) {
+                value = textField.getValue();
+            }
+            if (StringUtils.isNotEmpty(value)) {
+                Answers oldAnswers = answersMap.get(es.getKey());
+                if (oldAnswers != null) {
+                    oldAnswers.setText(value);
+                    answersService.update(oldAnswers);
+                } else {
+                    Answers newAnswers = answersService.create(employeeSurveyId, es.getKey(), getUserType().name(), value);
+                    answersMap.put(es.getKey(), newAnswers);
+                }
+                System.out.println("Saved");
+            }
+        });
     }
 
     private Component renderQuestions(List<SurveyQuestion> questions) {
@@ -211,6 +249,8 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
                 default -> null;
             };
             if (questionComponent != null) {
+                ((HasValue) questionComponent).setReadOnly(isReadOnly());
+                ((AbstractField) questionComponent).addValueChangeListener(e -> onChange());
                 body.add(renderQuestion(question, questionComponent));
                 answersComponentMap.put(question.getQuestion().getQuestionId(), questionComponent);
             }
@@ -239,80 +279,67 @@ public class SurveyView extends VerticalLayout implements HasUrlParameter<String
         return layout;
     }
 
+    private void onChange() {
+        enableButton(submitButton, true);
+        enableButton(finishButton, true);
+    }
+
+    private boolean isReadOnly() {
+        return (getUserType() == MANAGER && employeeSurvey.isManCompleted()) ||
+            (getUserType() == EMPLOYEE && employeeSurvey.isEmpCompleted());
+    }
+
     private Component renderDropdownQuestion(SurveyQuestion question, Answers answers) {
         Select<String> dropdown = new Select<>();
         //Label label = new Label(question.getQuestion().getText());
         dropdown.setLabel(question.getQuestion().getText());
         dropdown.setItems("1", "2", "3", "4", "5");
         dropdown.setWidthFull();
+        if (isReadOnly()) {
+            dropdown.setReadOnly(true);
+        }
+        dropdown.addValueChangeListener(e -> onChange());
+
         return dropdown;
     }
 
     private Component renderCheckBoxQuestion(SurveyQuestion question, Answers answers) {
         Checkbox checkbox = new Checkbox(question.getQuestion().getText());
+        if (isReadOnly()) {
+            checkbox.setReadOnly(true);
+        }
+        checkbox.addValueChangeListener(e -> onChange());
+
         return checkbox;
     }
 
     private Component renderRadioButtonQuestion(SurveyQuestion question, Answers answers) {
         RadioButtonGroup<String> optionsGroup = new RadioButtonGroup<>();
-//        label.addClassNames(
-//                LumoUtility.TextColor.BODY,
-//                LumoUtility.FontSize.SMALL
-//        );
-//        optionsGroup.getStyle().set("overflow-y", "auto");
-//        optionsGroup.setLabel(question.getQuestion().getDescription());
         optionsGroup.setWidthFull();
-        switch (question.getQuestion().getAnswers()) {
-            case 2:
-                optionsGroup.setItems("1", "2");
-                optionsGroup.setRenderer(new TextRenderer<>((mn) -> switch (mn) {
-                    case "1" -> "Так";
-                    case "2" -> "Ні";
-                    default -> "";
-                }));
-                break;
-            case 3:
-                optionsGroup.setItems("Так", "Частково", "Ні");
-                break;
-            case 4:
-                optionsGroup.setItems("1", "2", "3", "4");
-                optionsGroup.setRenderer(new TextRenderer<>((mn) -> switch (mn) {
-                    case "1" -> "Відмінно";
-                    case "2" -> "Добре";
-                    case "3" -> "Задовільно";
-                    case "4" -> "Не задовільно";
-                    default -> "";
-                }));
-                break;
-            case 5:
-                optionsGroup.setItems("Відмінно", "Добре", "Задовільно", "Не задовільно", "Погано");
-                break;
-            default:
-                List<String> list = new ArrayList<>();
-                for (int i = 0; i < question.getQuestion().getAnswers(); i++) {
-                    list.add(Integer.toString(i + 1));
-                }
-                optionsGroup.setItems(list);
-                break;
-
-        }
+        optionsGroup.setItems(QuestionComponents.getRadioGroupIds(question.getQuestion().getAnswers()));
+        var values = QuestionComponents.getRadioGroupValues(question.getQuestion().getAnswers());
+        optionsGroup.setRenderer(new TextRenderer<>((mn) -> {
+            int index = Integer.parseInt(mn) - 1;
+            return values.get(index);
+        }));
         if (answers != null) {
             optionsGroup.setValue(answers.getText());
         }
-        //   optionsGroup.getStyle().set("flexDirection", "column"); // Розташувати по вертикалі
+        optionsGroup.setReadOnly(isReadOnly());
+        optionsGroup.addValueChangeListener(e -> onChange());
         return optionsGroup;
     }
 
-    //    private void renderTextQuestion(SurveyQuestion question) {
-//        TextField questionField = new TextField(question.getQuestion().getText());
-//        questionField.setWidth("400px");
-//        add(questionField);
-//    }
     private Component renderTextQuestion(SurveyQuestion question, Answers answers) {
         TextField textField = new TextField();
         textField.setWidthFull();
+        textField.setValueChangeMode(ValueChangeMode.EAGER);
+        textField.addValueChangeListener(e -> onChange());
         if (answers != null) {
             textField.setValue(answers.getText());
+        }
+        if (isReadOnly()) {
+            textField.setReadOnly(true);
         }
         return textField;
     }
