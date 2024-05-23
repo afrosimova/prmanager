@@ -1,10 +1,11 @@
 package com.afrosimova.prmanager;
 
 import com.afrosimova.prmanager.security.SecurityService;
-import com.afrosimova.prmanager.views.*;
+import com.afrosimova.prmanager.views.EmployeeSurveysView;
+import com.afrosimova.prmanager.views.LobbyView;
+import com.afrosimova.prmanager.views.ManagerSurveysView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
@@ -55,8 +56,6 @@ public class MainLayout extends AppLayout {
         Button logout = new Button("Log out " + u, e -> securityService.logout()); // <2>
         var header = new HorizontalLayout(logout);
         //header.getStyle().set( "border" , "6px dotted DarkOrange" ) ;
-        //header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
-        //header.setAlignItems(FlexComponent.Alignment.END);
         header.setJustifyContentMode(JustifyContentMode.END);
         header.setWidthFull();
         header.addClassNames(
@@ -79,14 +78,9 @@ public class MainLayout extends AppLayout {
 
     private Tab[] createMenuItems() {
         return new Tab[]{
-                //new Tab(createRouterLink("Employee", VaadinIcon.LIST, EmployeeProfileView.class)),
-
+                new Tab(createRouterLink("", VaadinIcon.HOME, LobbyView.class)),
                 new Tab(createRouterLink("Співробітник", VaadinIcon.LIST, EmployeeSurveysView.class)),
                 new Tab(createRouterLink("Менеджер", VaadinIcon.LIST, ManagerSurveysView.class)),
-
-                // new Tab(createRouterLink("Survey", VaadinIcon.SEARCH, SurveyView.class)),
-                //new Tab(createRouterLink("Result", VaadinIcon.LIST, ResultView.class)),
-                //new Tab(createRouterLink("Error", VaadinIcon.WARNING, org.springframework.samples.petclinic.ui.view.ExitView.class))
         };
     }
 

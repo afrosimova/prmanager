@@ -212,10 +212,10 @@ public class SummarySurveyView extends VerticalLayout implements HasUrlParameter
                 managerAnswers != null && managerAnswers.getText() != null) {
             int empAnswerValue = Integer.parseInt(employeeAnswers.getText());
             int manAnswerValue = Integer.parseInt(managerAnswers.getText());
-            if (empAnswerValue > manAnswerValue) {
+            if (empAnswerValue < manAnswerValue) {
                 employeeOptionsGroup.getStyle().set("background-color","Salmon");
                 managerOptionsGroup.getStyle().set("background-color","Salmon");
-            } else if (empAnswerValue < manAnswerValue) {
+            } else if (empAnswerValue > manAnswerValue) {
                 employeeOptionsGroup.getStyle().set("background-color","PaleGreen");
                 managerOptionsGroup.getStyle().set("background-color","PaleGreen");
             }
