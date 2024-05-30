@@ -1,0 +1,35 @@
+
+
+body {
+    background-color: #ffffff; /* Білий фон */
+    color: #000080; /* Темно-синій текст */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #000080; /* Темно-синій заголовок */
+}
+
+button {
+    background-color: #87CEEB; /* Світло-синій фон кнопки */
+    color: #ffffff; /* Білий текст кнопки */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4682B4; /* Темніший синій при наведенні */
+}
+
+footer {
+    background-color: #000080; /* Темно-синій фон підвалу */
+    color: #ffffff; /* Білий текст підвалу */
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

@@ -17,8 +17,6 @@ public class Question {
     private long questionId;
     @NotEmpty private String text;
     @NotEmpty private String description;
-    @NotEmpty private int type;
-    @NotEmpty private int answers;
+    @NotEmpty private Integer type;
+    @NotEmpty private Integer answers;
 }
-
-

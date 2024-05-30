@@ -1,4 +1,4 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
 import com.afrosimova.prmanager.entities.Answers;
 import com.afrosimova.prmanager.entities.AnswersType;
@@ -10,6 +10,7 @@ import com.afrosimova.prmanager.services.SurveyService;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -91,11 +92,13 @@ public abstract class SurveyView extends VerticalLayout implements HasUrlParamet
                 LumoUtility.Background.CONTRAST_10);
         Label label = new Label();
         SimpleDateFormat sdf = new SimpleDateFormat(
-                "MM/dd/yyyy");
+                "dd/MM/yyyy");
+
         label.setText(
                 employeeSurvey.getSurvey().getSurveyName() + " (" +
                         sdf.format(employeeSurvey.getSurvey().getDate()) + " - " +
                         sdf.format(employeeSurvey.getSurvey().getDateEnd()) + ") "
+
         );
         label.addClassNames(
                 LumoUtility.TextColor.BODY,
@@ -109,6 +112,7 @@ public abstract class SurveyView extends VerticalLayout implements HasUrlParamet
                         "для " + employeeSurvey.getEmployee().getLastName() + " " +
                         employeeSurvey.getEmployee().getFirstName()
         );
+        label.getStyle().set("font-weight", "bold");
         label.addClassNames(
                 LumoUtility.TextColor.BODY,
                 LumoUtility.AlignContent.CENTER,

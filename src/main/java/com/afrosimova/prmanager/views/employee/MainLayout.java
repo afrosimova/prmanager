@@ -1,9 +1,9 @@
-package com.afrosimova.prmanager;
+package com.afrosimova.prmanager.views.employee;
 
 import com.afrosimova.prmanager.security.SecurityService;
-import com.afrosimova.prmanager.views.EmployeeSurveysView;
-import com.afrosimova.prmanager.views.LobbyView;
-import com.afrosimova.prmanager.views.ManagerSurveysView;
+import com.afrosimova.prmanager.views.employee.EmployeeSurveysView;
+import com.afrosimova.prmanager.views.employee.LobbyView;
+import com.afrosimova.prmanager.views.employee.ManagerSurveysView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
@@ -80,7 +80,7 @@ public class MainLayout extends AppLayout {
         return new Tab[]{
                 new Tab(createRouterLink("", VaadinIcon.HOME, LobbyView.class)),
                 new Tab(createRouterLink("Співробітник", VaadinIcon.LIST, EmployeeSurveysView.class)),
-                new Tab(createRouterLink("Менеджер", VaadinIcon.LIST, ManagerSurveysView.class)),
+                new Tab(createRouterLink("Керівник", VaadinIcon.LIST, ManagerSurveysView.class)),
         };
     }
 

@@ -1,4 +1,4 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
 import com.afrosimova.prmanager.entities.AnswersType;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
@@ -38,8 +38,8 @@ public abstract class SurveysView extends VerticalLayout implements HasDynamicTi
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns();
-        grid.addColumn(EmployeeSurvey::getEmployeeSurveyId).setHeader("id");
-        grid.addColumn(es -> es.getSurvey().getSurveyName()).setHeader("Назва");
+        grid.addColumn(EmployeeSurvey::getEmployeeSurveyId).setHeader("№");
+        grid.addColumn(es -> es.getSurvey().getSurveyName()).setHeader("Назва опитування");
         grid.addColumn(es -> es.getSurvey().getDate()).setHeader("Дата початку");
         grid.addColumn(es -> es.getSurvey().getDateEnd()).setHeader("Дата завершення");
         if (getUserType() == MANAGER) {
@@ -47,7 +47,7 @@ public abstract class SurveysView extends VerticalLayout implements HasDynamicTi
             grid.addColumn(es -> es.getEmployee().getPosition().getPositionName()).setHeader("Посада");
         }
         if (getUserType() == AnswersType.EMPLOYEE) {
-            grid.addColumn(es -> es.getManager().getFullName()).setHeader("Менеджер");
+            grid.addColumn(es -> es.getManager().getFullName()).setHeader("Керівник");
         }
         grid.addComponentColumn((item) -> {
             Checkbox checkBox = new Checkbox();
@@ -60,7 +60,7 @@ public abstract class SurveysView extends VerticalLayout implements HasDynamicTi
             checkBox.setValue(item.isManCompleted());
             checkBox.setReadOnly(true);
             return checkBox;
-        }).setHeader("Заповнено менеджером");
+        }).setHeader("Заповнено керівником");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.addItemDoubleClickListener(listener -> {

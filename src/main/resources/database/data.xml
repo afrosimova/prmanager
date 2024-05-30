@@ -40,24 +40,24 @@
             values (6, 'Senior Project Manager');
 
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (7, 8, 'Dontdo', 'Nothing', 6, NULL, 'seniormanager@gmail.com' );
+            values (7, 8, 'Дмитро', 'Коваль', 6, NULL, 'seniormanager@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (6, 7, 'Do', 'Nothing', 5, 7, 'manager@gmail.com' );
+            values (6, 7, 'Ольга', 'Ткачук', 5, 7, 'manager@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (1, 2, 'Anastasiia', 'Afrosimova', 1, 6, 'aa@gmail.com' );
+            values (1, 2, 'Анастасія', 'Бондар', 1, 6, 'aa@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (2, 3, 'Simple', 'Jun', 1, 6, 'junior@gmail.com' );
+            values (2, 3, 'Тарас', 'Швець', 1, 6, 'junior@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (3, 4, 'Just', 'Dev', 2, 6, 'middle@gmail.com' );
+            values (3, 4, 'Олександра', 'Сидоренко', 2, 6, 'middle@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
-            values (4, 5, 'Old', 'Boy', 3, 6, 'senior@gmail.com' );
+            values (4, 5, 'Сергій', 'Bарварук', 3, 6, 'senior@gmail.com' );
             insert into EMPLOYEE (EMPLOYEE_ID, USER_ID, FIRST_NAME, LAST_NAME, POSITION_ID, MANAGER_ID, EMAIL)
             values (5, 6, 'Elder', 'Wolf', 4, 6, 'techleader@gmail.com' );
 
             insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
-            values (1, '2023-01-02 04:03:05', 'YEAR SURVEY 2023', '2024-03-02 05:06:07');
+            values (1, '2023-05-05 08:00:00', 'Річне опитування за 2023', '2024-06-05 18:00:00');
             insert into SURVEY (SURVEY_ID, DATE_START, SURVEY_NAME, DATE_END)
-            values (2, '2024-01-02 04:03:05', 'YEAR SURVEY 2024', '2024-09-02 05:06:07');
+            values (2, '2024-06-05 09:00:00', 'Річне опитування 2024', '2024-07-05 00:00:00');
 
             insert into EMPLOYEE_SURVEY (EMPLOYEE_SURVEY_ID, EMPLOYEE_ID, SURVEY_ID, MANAGER_ID, EMP_COMPLETED, MAN_COMPLETED)
             values (1, 1, 1, 6, false, false);
@@ -95,9 +95,9 @@
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)
             values (9, 'Ініціативнсть','Активно пропонує і приймає участь у поліпшенні процесу роботи і результату, усуненню негараздів. Робить більше, ніж вимагається. Не потребує додаткової мотивації для вирішення задач.', 3, 4);
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)
-            values (10, 'Гнучкість','Активно пристосовується до нових, динамічних ситуацій, які вимагають нестандартних рішень, та ефективно працює в таких умовах. Вчиться на особистому досвіді. При цьому 0 - Протидіє змінам без повного ознайомлення з прозиціями, безкомпромісно дотримується звичної позиції', 3, 4);
+            values (10, 'Гнучкість','Активно пристосовується до нових, динамічних ситуацій, які вимагають нестандартних рішень, та ефективно працює в таких умовах. Вчиться на особистому досвіді.', 3, 4);
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)
-            values (11, 'Вплив','Доносить ідеї переконливо та отримує підтримку від інших. Здатний надихати, спонукати інших до дій. Підтримує в інших розуміння відповідальності за їх власні дії. При цьому 0 - Покладається тільки на свій статус при впливі на інших людей. Будує односторонні відносини, нічого не вкладаючи в них.', 3, 4);
+            values (11, 'Вплив','Доносить ідеї переконливо та отримує підтримку від інших. Здатний надихати, спонукати інших до дій. Підтримує в інших розуміння відповідальності за їх власні дії.', 3, 4);
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)
             values (12, 'Відповідальність','Здатність чітко дотримуватись взятих на себе зобовязань. Відверто визнавати свої помилки і приймати рішення по їх виправленню. Демонструє узгодженість між словами та діями. Працює так, що викликає бажання у інших працювати разом з ним (нею).', 3, 2);
             insert into QUESTION (QUESTION_ID, TEXT, DESCRIPTION, TYPE, ANSWERS)

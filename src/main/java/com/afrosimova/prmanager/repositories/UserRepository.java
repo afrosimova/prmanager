@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from USER u " +
             "where lower(u.loginUser) = lower(:loginUser)")
     List<User> findUser(@Param("loginUser") String loginUser);
+
+    @Query("select u from USER u")
+    List<User> getUsers();
 }

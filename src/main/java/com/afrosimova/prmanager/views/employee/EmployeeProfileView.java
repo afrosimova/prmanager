@@ -1,4 +1,4 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
 import com.afrosimova.prmanager.entities.Employee;
 import com.afrosimova.prmanager.services.EmployeeService;

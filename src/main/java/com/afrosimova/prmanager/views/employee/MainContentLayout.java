@@ -1,4 +1,4 @@
-package com.afrosimova.prmanager;
+package com.afrosimova.prmanager.views.employee;
 
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.html.Div;

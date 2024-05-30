@@ -1,4 +1,4 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
@@ -19,6 +19,18 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     public LoginView(){
         addClassName("login-view");
         setSizeFull();
+
+        getElement().getStyle().set("background-image", "url('https://i.pinimg.com/originals/bc/fe/36/bcfe3678767235a08366a55d6ef7ac64.jpg')");
+
+        //getElement().getStyle().set("height", "50%");
+        //getElement().getStyle().set("width", "50%");
+        getElement().getStyle().set("background-size", "cover");
+        getElement().getStyle().set("background-position", "center");
+        getElement().getStyle().set("background-repeat", "no-repeat");
+        getElement().getStyle().set("display", "flex");
+        getElement().getStyle().set("align-items", "center");
+        getElement().getStyle().set("justify-content", "center");
+
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 

@@ -1,6 +1,5 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
-import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.AnswersType;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
 import com.afrosimova.prmanager.security.MyUserPrincipal;
@@ -11,24 +10,24 @@ import jakarta.annotation.security.RolesAllowed;
 
 import java.util.List;
 
-import static com.afrosimova.prmanager.entities.AnswersType.MANAGER;
+import static com.afrosimova.prmanager.entities.AnswersType.EMPLOYEE;
 
-@Route(value = "manager_surveys", layout = MainContentLayout.class)
+@Route(value = "employee_surveys", layout = MainContentLayout.class)
 @RolesAllowed("USER")
-public class ManagerSurveysView extends SurveysView {
+public class EmployeeSurveysView extends SurveysView {
 
-    public ManagerSurveysView(EmployeeSurveyService employeeSurveyService, SecurityService securityService) {
+    public EmployeeSurveysView(EmployeeSurveyService employeeSurveyService, SecurityService securityService) {
         super(employeeSurveyService, securityService);
     }
 
     @Override
     public List<EmployeeSurvey> findSurveys() {
         MyUserPrincipal principal = (MyUserPrincipal) securityService.getAuthenticatedUser();
-        return employeeSurveyService.findManagerSurveys(principal.getUser().getUserId());
+        return employeeSurveyService.findEmployeeSurveys(principal.getUser().getUserId());
     }
 
     @Override
     public AnswersType getUserType() {
-        return MANAGER;
+        return EMPLOYEE;
     }
 }

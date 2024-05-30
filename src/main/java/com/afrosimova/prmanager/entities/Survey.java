@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity(name = "SURVEY")
 @Getter
@@ -21,12 +22,12 @@ public class Survey {
     private long surveyId;
     @NotEmpty
     @Column(name = "DATE_START")
-    private Date date;
+    private Timestamp date;
     @NotEmpty
     @Column(name = "SURVEY_NAME")
     private String surveyName = "";
     @Column(name = "DATE_END")
-    private Date dateEnd;
+    private Timestamp dateEnd;
 }
 
 

@@ -1,6 +1,5 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
-import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.Answers;
 import com.afrosimova.prmanager.entities.EmployeeSurvey;
 import com.afrosimova.prmanager.entities.SurveyQuestion;
@@ -83,8 +82,24 @@ public class SummarySurveyView extends VerticalLayout implements HasUrlParameter
     private void renderLayout(List<SurveyQuestion> questions) {
         add(renderHeader());
         add(renderQuestions(questions));
+add(render1Layout());
+add(render2Layout());
+        //nbhibbin
     }
-
+    private Component render1Layout() {
+        Label feedbackLabel = new Label("Відгук від керівника");
+        TextField feedbackField = new TextField();
+        feedbackField.setWidthFull();
+        this.add(feedbackLabel, feedbackField);
+        return feedbackField;
+    }
+    private Component render2Layout() {
+        Label feedbackLabel1 = new Label("Відгук від співробітника");
+        TextField feedbackField1 = new TextField();
+        feedbackField1.setWidthFull();
+        this.add(feedbackLabel1, feedbackField1);
+        return feedbackField1;
+    }
     private Component renderHeader() {
         final VerticalLayout header = new VerticalLayout();
         header.setMargin(false);
@@ -206,7 +221,7 @@ public class SummarySurveyView extends VerticalLayout implements HasUrlParameter
             managerOptionsGroup.setValue(managerAnswers.getText());
         }
         managerOptionsGroup.setReadOnly(true);
-        managerOptionsGroup.setLabel("Оцінка менеджера ");
+        managerOptionsGroup.setLabel("Оцінка керівника ");
 
         if (employeeAnswers != null && employeeAnswers.getText() != null &&
                 managerAnswers != null && managerAnswers.getText() != null) {
@@ -233,7 +248,7 @@ public class SummarySurveyView extends VerticalLayout implements HasUrlParameter
         }
         employeeText.setReadOnly(true);
 
-        Label manLabel = new Label("Оцінка менеджера");
+        Label manLabel = new Label("Оцінка керівника");
         TextField managerText = new TextField();
         managerText.setWidthFull();
         if (managerAnswers != null) {

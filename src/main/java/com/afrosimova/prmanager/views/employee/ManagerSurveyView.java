@@ -1,6 +1,5 @@
-package com.afrosimova.prmanager.views;
+package com.afrosimova.prmanager.views.employee;
 
-import com.afrosimova.prmanager.MainContentLayout;
 import com.afrosimova.prmanager.entities.AnswersType;
 import com.afrosimova.prmanager.services.AnswersService;
 import com.afrosimova.prmanager.services.EmployeeSurveyService;
