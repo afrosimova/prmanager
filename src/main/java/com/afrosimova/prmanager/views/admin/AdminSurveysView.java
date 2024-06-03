@@ -42,7 +42,7 @@ public class AdminSurveysView extends VerticalLayout {
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns();
-        grid.addColumn(Survey::getSurveyId).setHeader("Id");
+        grid.addColumn(Survey::getSurveyId).setHeader("№");
         grid.addColumn(Survey::getSurveyName).setHeader("Назва опитування");
         grid.addColumn(Survey::getDate).setHeader("Дата початку");
         grid.addColumn(Survey::getDateEnd).setHeader("Дата завершення");
@@ -56,7 +56,7 @@ public class AdminSurveysView extends VerticalLayout {
     }
 
     private Component getToolbar() {
-        Button addUserButton = new Button("Створити опитування");
+        Button addUserButton = new Button("Створити оцінювання");
         addUserButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addUserButton.addClickListener(click -> addSurvey());
 

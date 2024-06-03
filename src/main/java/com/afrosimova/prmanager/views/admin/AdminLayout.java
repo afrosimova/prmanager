@@ -61,9 +61,9 @@ public class AdminLayout extends AppLayout {
     private void createDrawer() {
         addToDrawer(new VerticalLayout(
                 new RouterLink("Користувачі", UsersView.class),
-                new RouterLink("Співробітники", UsersView.class),
-                new RouterLink("Посади", UsersView.class),
-                new RouterLink("Опитування", AdminSurveysView.class),
+                //new RouterLink("Співробітники", UsersView.class),
+                //new RouterLink("Посади", UsersView.class),
+                new RouterLink("Оцінювання", AdminSurveysView.class),
                 new RouterLink("Питання", AdminQuestionsView.class)
         ));
     }

@@ -35,7 +35,7 @@ public class LobbyView extends VerticalLayout {
 //        getElement().getStyle().set("background-size", "cover");
 
         Component title = new H1("Performance Review");
-        title.addClassNames(LumoUtility.TextColor.PRIMARY,
+        title.addClassNames(LumoUtility.TextColor.SUCCESS_CONTRAST,
                 LumoUtility.TextAlignment.CENTER,
                 LumoUtility.AlignSelf.CENTER,
                 LumoUtility.Padding.LARGE);
@@ -61,8 +61,8 @@ public class LobbyView extends VerticalLayout {
 
     private void styleButton(Button button) {
         button.addClassNames(LumoUtility.AlignSelf.CENTER,
-                LumoUtility.Background.SUCCESS_50,
-                LumoUtility.TextColor.SUCCESS_CONTRAST,
+                LumoUtility.Background.CONTRAST_40,
+                LumoUtility.TextColor.PRIMARY_CONTRAST,
                 LumoUtility.BoxShadow.XLARGE,
                 LumoUtility.BorderRadius.LARGE);
         button.setWidth("160px");

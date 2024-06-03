@@ -43,7 +43,7 @@ public class UsersView extends VerticalLayout {
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns();
-        grid.addColumn(User::getUserId).setHeader("Id");
+        grid.addColumn(User::getUserId).setHeader("№");
         grid.addColumn(User::getLoginUser).setHeader("Login");
         grid.addComponentColumn((item) -> {
             Checkbox checkBox = new Checkbox();
@@ -62,7 +62,7 @@ public class UsersView extends VerticalLayout {
     }
 
     private Component getToolbar() {
-        Button addUserButton = new Button("Створити користувача");
+        Button addUserButton = new Button("Зареєструвати співробітника");
         addUserButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addUserButton.addClickListener(click -> addUser());
 

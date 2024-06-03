@@ -5,7 +5,7 @@ import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.textfield.TextField;
 
 public class SurveyForm extends GeneralForm<Survey> {
-    TextField surveyName = new TextField("Назва опитування");
+    TextField surveyName = new TextField("Назва оцінювання");
     DateTimePicker date = new DateTimePicker("Дата початку");
     DateTimePicker dateEnd = new DateTimePicker("Дата завершення");
 
